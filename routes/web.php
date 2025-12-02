@@ -7,10 +7,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function () {
-    return 'This is a test route.';
+Route::get('/product-detail', function() {
+    return view('product-detail');
 });
 
 Route::get('/product', function () {
     return view('product-page');
+});
+
+Route::get('/test', function () {
+    return view('test-page');
 });

@@ -4,17 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('homepage'); 
+})->name('home');
 
-Route::get('/product-detail', function() {
-    return view('product-detail');
-});
+Route::get('/layanan', function () {
+    return view('layanan'); 
+})->name('layanan');
 
-Route::get('/product', function () {
-    return view('product-page');
-});
-
-Route::get('/test', function () {
-    return view('test-page');
-});
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');

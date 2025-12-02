@@ -22,7 +22,7 @@
                             blue: '#005BEC',
                             dark: '#0A43C3',
                             light: '#EEF2FF',
-                            gray: '#f8f9fa' // warna background section
+                            gray: '#f8f9fa' 
                         }
                     },
                     fontFamily: {
@@ -34,12 +34,10 @@
     </script>
 
     <style>
-        /* CSS Reset kecil untuk memastikan navbar fixed tidak menutupi konten */
         body {
             padding-top: 80px;
         }
 
-        /* Scrollbar halus */
         html {
             scroll-behavior: smooth;
         }
@@ -313,7 +311,6 @@
     </div>
 
     <script>
-        // --- 1. Logic Hamburger Menu (Yang Lama) ---
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
 
@@ -321,43 +318,29 @@
             menu.classList.toggle('hidden');
         });
 
-        // --- 2. Logic Wishlist Baru ---
-
         function toggleWishlist(button, event) {
-            // Mencegah klik tembus ke kartu produk (agar tidak pindah halaman)
             event.stopPropagation();
 
-            // Ambil elemen icon <i> di dalam tombol
             const icon = button.querySelector('i');
 
-            // Cek apakah icon sedang kosong (regular) atau sudah di-love (solid)
             if (icon.classList.contains('fa-regular')) {
-                // -- AKSI: MENAMBAHKAN KE WISHLIST --
 
-                // 1. Ubah icon jadi Solid (Penuh) & Warna Merah
                 icon.classList.remove('fa-regular', 'text-gray-400');
                 icon.classList.add('fa-solid', 'text-red-500');
 
-                // 2. Efek detak jantung sebentar (animasi scale)
                 icon.style.transform = "scale(1.2)";
                 setTimeout(() => icon.style.transform = "scale(1)", 200);
 
-                // 3. Tampilkan Popup Sukses
                 showToast("Produk ditambahkan ke Wishlist");
 
             } else {
-                // -- AKSI: MENGHAPUS DARI WISHLIST --
 
-                // 1. Kembalikan ke icon awal
                 icon.classList.remove('fa-solid', 'text-red-500');
                 icon.classList.add('fa-regular', 'text-gray-400');
 
-                // (Opsional) Tidak perlu menampilkan popup saat menghapus, 
-                // atau bisa buat popup beda pesan.
             }
         }
 
-        // --- Fungsi Mengatur Tampilan Popup (Toast) ---
         let toastTimeout;
 
         function showToast(message) {
@@ -365,20 +348,16 @@
             const overlay = document.getElementById('toast-overlay');
             const content = document.getElementById('toast-content');
 
-            // Hapus timeout lama jika user klik cepat berkali-kali
             clearTimeout(toastTimeout);
 
-            // 1. Tampilkan Wrapper
             toast.classList.remove('hidden');
 
-            // 2. Animasi Masuk (Perlu jeda dikit agar transition jalan)
             setTimeout(() => {
                 overlay.classList.remove('opacity-0');
                 content.classList.remove('scale-90', 'opacity-0');
                 content.classList.add('scale-100', 'opacity-100');
             }, 10);
 
-            // 3. Auto Hilang setelah 3 detik
             toastTimeout = setTimeout(() => {
                 closeToast();
             }, 3000);
@@ -389,12 +368,10 @@
             const overlay = document.getElementById('toast-overlay');
             const content = document.getElementById('toast-content');
 
-            // 1. Animasi Keluar
             overlay.classList.add('opacity-0');
             content.classList.remove('scale-100', 'opacity-100');
             content.classList.add('scale-90', 'opacity-0');
 
-            // 2. Sembunyikan Wrapper setelah animasi selesai (300ms sesuai duration CSS)
             setTimeout(() => {
                 toast.classList.add('hidden');
             }, 300);

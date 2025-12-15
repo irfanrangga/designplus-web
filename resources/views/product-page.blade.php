@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etalase Produk - Designplus</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
@@ -54,11 +53,9 @@
             </a>
 
             <div class="hidden lg:flex flex-grow justify-center max-w-[600px] mx-auto">
-                <div
-                    class="flex items-center w-full bg-brand-light rounded-xl px-4 py-2.5 transition focus-within:ring-2 focus-within:ring-brand-blue/20">
+                <div class="flex items-center w-full bg-brand-light rounded-xl px-4 py-2.5 transition focus-within:ring-2 focus-within:ring-brand-blue/20">
                     <i class="fa-solid fa-magnifying-glass text-gray-400 text-lg"></i>
-                    <input type="text" placeholder="Cari produk"
-                        class="w-full bg-transparent border-none outline-none ml-3 text-sm text-gray-700 placeholder-gray-500">
+                    <input type="text" placeholder="Cari produk" class="w-full bg-transparent border-none outline-none ml-3 text-sm text-gray-700 placeholder-gray-500">
                 </div>
             </div>
 
@@ -66,22 +63,19 @@
                 <ul class="flex items-center gap-6 text-[15px] font-medium text-gray-600">
 
                     <li>
-                        <a href="{{ route('home') }}"
-                            class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
                             Beranda
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('product.index') }}"
-                            class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                        <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
                             Produk
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('layanan') }}"
-                            class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                        <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
                             Layanan
                         </a>
                     </li>
@@ -105,26 +99,21 @@
             </button>
         </div>
 
-        <div id="mobile-menu"
-            class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-[80px] shadow-lg p-5 flex flex-col gap-4">
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-[80px] shadow-lg p-5 flex flex-col gap-4">
             <div class="flex items-center bg-brand-light rounded-xl px-4 py-3 w-full">
                 <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-                <input type="text" placeholder="Cari produk"
-                    class="w-full bg-transparent border-none outline-none ml-3 text-sm">
+                <input type="text" placeholder="Cari produk" class="w-full bg-transparent border-none outline-none ml-3 text-sm">
             </div>
 
-            <a href="{{ route('home') }}"
-                class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
                 Beranda
             </a>
 
-            <a href="{{ route('product.index') }}"
-                class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
+            <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
                 Produk
             </a>
 
-            <a href="{{ route('layanan') }}"
-                class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
+            <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">
                 Layanan
             </a>
 
@@ -142,8 +131,7 @@
     <main>
         <section class="relative h-[400px] flex items-center justify-center text-center text-white mb-10">
             <div class="absolute inset-0 bg-black/50 z-10"></div>
-            <div class="absolute inset-0 bg-cover bg-center z-0"
-                style="background-image: url('{{ asset('assets/bg_home.png') }}');"></div>
+            <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset("assets/bg_home.png") }}')"></div>
 
             <div class="relative z-20 px-4 max-w-3xl">
                 <h2 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight drop-shadow-md">Produk Kami</h2>
@@ -168,57 +156,50 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-20">
 
                 @forelse($products as $product)
-                    <div onclick="window.location.href='{{ url('/product/' . $product->id) }}'"
-                        class="group relative bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                <div onclick="window.location.href='{{ url('/product/' . $product->id) }}'" class="group relative bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
 
-                        <button onclick="toggleWishlist(this, event)"
-                            class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 backdrop-blur text-gray-400 hover:bg-red-50 flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-100">
+                    <button onclick="toggleWishlist(this, event)" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 backdrop-blur text-gray-400 hover:bg-red-50 flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-100">
 
-                            <i class="fa-regular fa-heart text-lg transition-transform duration-200"></i>
-                        </button>
+                        <i class="fa-regular fa-heart text-lg transition-transform duration-200"></i>
+                    </button>
 
-                        <div class="h-[220px] overflow-hidden bg-gray-50 border-b border-gray-100">
-                            <img src="{{ asset($product->file) }}" alt="{{ $product->nama }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out">
-                        </div>
+                    <div class="h-[220px] overflow-hidden bg-gray-50 border-b border-gray-100">
+                        <img src="{{ asset($product->file) }}" alt="{{ $product->nama }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out">
+                    </div>
 
-                        <div class="p-5 flex flex-col flex-grow">
-                            <span
-                                class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">{{ $product->kategori }}</span>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">{{ $product->kategori }}</span>
 
-                            <h3
-                                class="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-brand-blue transition line-clamp-2">
-                                {{ $product->nama }}
-                            </h3>
+                        <h3 class="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-brand-blue transition line-clamp-2">
+                            {{ $product->nama }}
+                        </h3>
 
-                            <div class="flex items-center gap-1 mb-4">
-                                <div class="flex text-yellow-400 text-xs">
-                                    @php
-                                        $rating = $product->rating;
-                                        $full = floor($rating);
-                                        $half = ($rating - $full) >= 0.5;
-                                    @endphp
-                                    @for($i = 0; $i < $full; $i++) <i class="fa-solid fa-star"></i> @endfor
+                        <div class="flex items-center gap-1 mb-4">
+                            <div class="flex text-yellow-400 text-xs">
+                                @php
+                                $rating = $product->rating;
+                                $full = floor($rating);
+                                $half = ($rating - $full) >= 0.5;
+                                @endphp
+                                @for($i = 0; $i < $full; $i++) <i class="fa-solid fa-star"></i> @endfor
                                     @if($half) <i class="fa-solid fa-star-half-stroke"></i> @php $full++; @endphp @endif
                                     @for($i = $full; $i < 5; $i++) <i class="fa-regular fa-star text-gray-300"></i> @endfor
-                                </div>
-                                <span class="text-xs text-gray-500 ml-1">({{ $rating }})</span>
                             </div>
+                            <span class="text-xs text-gray-500 ml-1">({{ $rating }})</span>
+                        </div>
 
-                            <div
-                                class="mt-auto pt-3 border-t border-dashed border-gray-200 flex justify-between items-center">
-                                <span class="text-lg font-bold text-gray-900">Rp
-                                    {{ number_format($product->harga, 0, ',', '.') }}</span>
-                            </div>
+                        <div class="mt-auto pt-3 border-t border-dashed border-gray-200 flex justify-between items-center">
+                            <span class="text-lg font-bold text-gray-900">Rp
+                                {{ number_format($product->harga, 0, ',', '.') }}</span>
                         </div>
                     </div>
+                </div>
                 @empty
-                    <div
-                        class="col-span-full py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                        <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-lg font-semibold text-gray-600">Belum ada produk</h3>
-                        <p class="text-gray-400 text-sm">Coba jalankan seeder atau cek koneksi database.</p>
-                    </div>
+                <div class="col-span-full py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+                    <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-600">Belum ada produk</h3>
+                    <p class="text-gray-400 text-sm">Coba jalankan seeder atau cek koneksi database.</p>
+                </div>
                 @endforelse
 
             </div>
@@ -236,12 +217,10 @@
                         pelayanan tercepat.
                     </p>
                     <div class="flex items-center gap-5">
-                        <a href="#"
-                            class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
+                        <a href="#" class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
                             <i class="fa-brands fa-instagram text-lg"></i> designplus
                         </a>
-                        <a href="#"
-                            class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
+                        <a href="#" class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
                             <i class="fa-brands fa-facebook text-lg"></i> designPlus
                         </a>
                     </div>
@@ -249,8 +228,7 @@
 
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-5 flex items-center gap-2">
-                        <span
-                            class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue text-sm">
+                        <span class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue text-sm">
                             <i class="fa-solid fa-address-book"></i>
                         </span>
                         Kontak
@@ -274,8 +252,7 @@
                 <div class="w-full">
                     <h3 class="font-bold text-gray-900 text-lg mb-5">Lokasi Kami</h3>
                     <div class="rounded-xl overflow-hidden shadow-sm border border-gray-200 h-[200px] bg-gray-200">
-                        <iframe src="https://maps.google.com/maps?q=Bekasi&output=embed" width="100%" height="100%"
-                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://maps.google.com/maps?q=Bekasi&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -289,11 +266,9 @@
     </footer>
     <div id="wishlist-toast" class="fixed inset-0 z-[100] flex items-center justify-center hidden pointer-events-none">
 
-        <div id="toast-overlay"
-            class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="toast-overlay" class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
 
-        <div id="toast-content"
-            class="relative bg-white rounded-2xl shadow-2xl p-6 flex items-center gap-4 transform scale-90 opacity-0 transition-all duration-300 pointer-events-auto min-w-[300px]">
+        <div id="toast-content" class="relative bg-white rounded-2xl shadow-2xl p-6 flex items-center gap-4 transform scale-90 opacity-0 transition-all duration-300 pointer-events-auto min-w-[300px]">
 
             <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-check text-xl text-green-600"></i>
@@ -338,6 +313,11 @@
                 icon.classList.remove('fa-solid', 'text-red-500');
                 icon.classList.add('fa-regular', 'text-gray-400');
 
+<<<<<<< Updated upstream
+=======
+                // (Opsional) Tidak perlu menampilkan popup saat menghapus,
+                // atau bisa buat popup beda pesan.
+>>>>>>> Stashed changes
             }
         }
 

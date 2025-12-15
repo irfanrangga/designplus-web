@@ -39,10 +39,12 @@
         }
     </style>
 </head>
-<body class="bg-brand-bg text-[#333] antialiased pb-10">
-
-    <div class="max-w-md mx-auto min-h-screen sm:max-w-lg md:max-w-2xl">
-
+<body class="bg-brand-bg text-[#333] antialiased">
+    <header class="bg-white p-5 sticky top-0 z-50 shadow-sm md:mb-6">
+        <div class="text-xl font-bold text-brand-blue">Designplus.</div>
+    </header>
+    <div class="mx-auto min-h-screen lg:w-2/3">
+        
         <main class="p-5 space-y-5 md:p-0">
 
             <section class="bg-white rounded-xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
@@ -214,10 +216,9 @@
             </section>
 
         </main>
-
-        <footer class="text-center text-sm text-white bg-blue-800 py-6 mt-6 md:rounded-t-xl">
-            © 2025 Designplus. Semua Hak Cipta Dilindungi.
-        </footer>
     </div>
+    <footer class="text-center text-sm text-white bg-blue-800 py-6 mt-6 ">
+            © 2025 Designplus. Semua Hak Cipta Dilindungi.
+    </footer>
 </body>
 </html>

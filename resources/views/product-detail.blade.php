@@ -46,9 +46,7 @@
                             <span class="text-sm text-gray-500 ml-2">({{ $rating }})</span>
                         </div>
                     </div>
-
                     <p class="text-gray-700 mb-6">Deskripsi produk belum tersedia.</p>
-
                     <p class="text-2xl font-semibold text-blue-600">Rp {{ number_format($product->harga, 0, ',', '.') }}</p>
                     <div class="mt-6">
                         <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600">Add to Cart</button>

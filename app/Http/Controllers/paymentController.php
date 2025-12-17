@@ -8,7 +8,6 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        // ... (Data simulasi sama seperti sebelumnya) ...
         $orderData = [
             'product' => [
                 'name' => 'Kaos Polos + Sablon',
@@ -44,8 +43,8 @@ class PaymentController extends Controller
         $grandTotal = $itemSubtotal + $orderData['shipping_cost'] - $discount + $ppn;
 
         $addresses = [
-            'Kantor - Muhammad Fulan (Jl. Moch Yamin No.26...)',
-            'Rumah - Muhammad Fulan (Jl. Dago Atas No. 10...)',
+            'Kantor - Muhammad Fulan (Jl. Moch Yamin No.26, Bojongsoang, Kabupaten Bandung, Jawa Barat, 18721)',
+            'Rumah - Muhammad Fulan (Jl. Dago Atas No. 10, Bandung, Jawa Barat, 40135)',
         ];
 
         $coupons = [
@@ -53,7 +52,6 @@ class PaymentController extends Controller
             ['code' => 'ONGKIRFREE', 'label' => 'Gratis Ongkir', 'value' => 12500],
         ];
 
-        // PERUBAHAN DISINI: memanggil view 'payment'
         return view('payment', compact('orderData', 'itemSubtotal', 'discount', 'ppn', 'grandTotal', 'addresses', 'coupons'));
     }
 }

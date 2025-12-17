@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController; // Tambahkan ini
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,3 +73,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/payment', [PaymentController::class, 'index']);
+Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');

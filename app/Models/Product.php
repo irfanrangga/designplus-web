@@ -12,4 +12,10 @@ class Product extends Model
     protected $table = 'products';
     protected $primaryKey = 'id';
     protected $fillable = ['nama', 'harga', 'kategori', 'file', 'rating'];
+
+    // mengecek apakah user sudah like atau belum di halaman katalog.
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
+    }
 }

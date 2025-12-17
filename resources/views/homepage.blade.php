@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage - Designplus</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -38,11 +39,11 @@
             scroll-behavior: smooth;
         }
 
-        /* Style untuk animasi infinite scroll pada section partner */
         @keyframes scroll {
             0% {
                 transform: translateX(0);
             }
+
             100% {
                 transform: translateX(-50%);
             }
@@ -56,121 +57,138 @@
 
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-<nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b border-gray-100 h-[80px]">
-    <div class="h-full px-6 lg:px-10 flex items-center justify-between">
+    <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b border-gray-100 h-[80px]">
+        <div class="h-full px-6 lg:px-10 flex items-center justify-between">
 
-        <a href="{{ route('home') }}" class="text-2xl font-bold text-brand-blue tracking-tighter shrink-0 mr-8">
-            Designplus.
-        </a>
+            <a href="{{ route('home') }}" class="text-2xl font-bold text-brand-blue tracking-tighter shrink-0 mr-8">
+                Designplus.
+            </a>
 
-        <div class="hidden lg:flex flex-grow justify-center max-w-[600px] mx-auto">
-            <div class="flex items-center w-full bg-brand-light rounded-xl px-4 py-2.5 transition focus-within:ring-2 focus-within:ring-brand-blue/20">
-                <i class="fa-solid fa-magnifying-glass text-gray-400 text-lg"></i>
-                <input type="text" placeholder="Cari produk" class="w-full bg-transparent border-none outline-none ml-3 text-sm text-gray-700 placeholder-gray-500">
+            <div class="hidden lg:flex flex-grow justify-center max-w-[600px] mx-auto">
+                <div
+                    class="flex items-center w-full bg-brand-light rounded-xl px-4 py-2.5 transition focus-within:ring-2 focus-within:ring-brand-blue/20">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-lg"></i>
+                    <input type="text" placeholder="Cari produk"
+                        class="w-full bg-transparent border-none outline-none ml-3 text-sm text-gray-700 placeholder-gray-500">
+                </div>
             </div>
-        </div>
 
-        <div class="hidden lg:flex items-center gap-8 ml-8">
-            <ul class="flex items-center gap-6 text-[15px] font-medium text-gray-600">
-                <li>
-                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
-                        Beranda
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
-                        Produk
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
-                        Layanan
-                    </a>
-                </li>
-            </ul>
-
-            <div class="h-6 w-px bg-gray-200"></div>
-
-            <div class="flex items-center gap-6">
-                <a href="#" class="text-xl text-gray-700 hover:text-brand-blue transition">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                </a>
-
-                @auth
-                    <div class="group relative">
-                        <a href="{{ route('profile') }}" class="flex items-center gap-2 text-gray-700 hover:text-brand-blue transition">
-                            <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
-                            <span class="font-medium text-[15px]">{{ Auth::user()->name }}</span>
-                            <i class="fa-solid fa-caret-down text-xs ml-1"></i>
+            <div class="hidden lg:flex items-center gap-8 ml-8">
+                <ul class="flex items-center gap-6 text-[15px] font-medium text-gray-600">
+                    <li>
+                        <a href="{{ route('home') }}"
+                            class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                            Beranda
                         </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('product.index') }}"
+                            class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                            Produk
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('layanan') }}"
+                            class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'hover:text-brand-blue transition' }}">
+                            Layanan
+                        </a>
+                    </li>
+                </ul>
 
-                        <div class="absolute right-0 mt-3 w-40 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 p-2">
+                <div class="h-6 w-px bg-gray-200"></div>
 
-                            <a href="{{ route('profile') }}" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition">
-                                <i class="fa-solid fa-gear"></i> Profile
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-xl text-gray-700 hover:text-brand-blue transition">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+
+                    @auth
+                        <div class="group relative">
+                            <a href="{{ route('profile') }}"
+                                class="flex items-center gap-2 text-gray-700 hover:text-brand-blue transition">
+                                <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
+                                <span class="font-medium text-[15px]">{{ Auth::user()->name }}</span>
+                                <i class="fa-solid fa-caret-down text-xs ml-1"></i>
                             </a>
 
-                            <form action="{{ route('logout') }}" method="POST" class="w-full">
-                                @csrf
-                                <button type="submit" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition justify-start">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-                                </button>
-                            </form>
+                            <div
+                                class="absolute right-0 mt-3 w-40 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 p-2">
+
+                                <a href="{{ route('profile') }}"
+                                    class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition">
+                                    <i class="fa-solid fa-gear"></i> Profile
+                                </a>
+
+                                <form action="{{ route('logout') }}" method="POST" class="w-full">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition justify-start">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                @else
-                    <a href="{{ route('login') }}" class="flex items-center gap-2 text-gray-700 hover:text-brand-blue transition group">
-                        <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
-                        <span class="font-medium text-[15px]">Masuk/Daftar</span>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="flex items-center gap-2 text-gray-700 hover:text-brand-blue transition group">
+                            <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
+                            <span class="font-medium text-[15px]">Masuk/Daftar</span>
+                        </a>
+                    @endauth
+
+                </div>
+            </div>
+
+            <button id="mobile-menu-btn" class="lg:hidden text-2xl text-gray-700 focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu"
+            class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-[80px] shadow-lg p-5 flex flex-col gap-4">
+            <div class="flex items-center bg-brand-light rounded-xl px-4 py-3 w-full">
+                <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+                <input type="text" placeholder="Cari produk"
+                    class="w-full bg-transparent border-none outline-none ml-3 text-sm">
+            </div>
+
+            <a href="{{ route('home') }}"
+                class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Beranda</a>
+            <a href="{{ route('product.index') }}"
+                class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Produk</a>
+            <a href="{{ route('layanan') }}"
+                class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Layanan</a>
+
+            <hr class="border-gray-100">
+
+            @auth
+                <div class="py-2 flex flex-col">
+                    <span class="text-gray-600 text-sm">Selamat datang,</span>
+                    <span class="font-semibold text-lg text-gray-900 mb-2">{{ Auth::user()->name }}</span>
+
+                    <a href="{{ route('profile') }}"
+                        class="text-sm font-medium text-brand-blue hover:text-brand-dark flex items-center gap-2">
+                        <i class="fa-solid fa-gear"></i> Pengaturan Akun
                     </a>
-                @endauth
 
-            </div>
+                    <form action="{{ route('logout') }}" method="POST" class="mt-3">
+                        @csrf
+                        <button type="submit"
+                            class="text-sm font-medium text-red-600 hover:text-red-700 flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-gray-600 font-medium">Status</span>
+                    <a href="{{ route('login') }}" class="text-brand-blue font-semibold hover:underline">
+                        Masuk / Daftar
+                    </a>
+                </div>
+            @endauth
         </div>
-
-        <button id="mobile-menu-btn" class="lg:hidden text-2xl text-gray-700 focus:outline-none">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-
-    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-[80px] shadow-lg p-5 flex flex-col gap-4">
-        <div class="flex items-center bg-brand-light rounded-xl px-4 py-3 w-full">
-            <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-            <input type="text" placeholder="Cari produk" class="w-full bg-transparent border-none outline-none ml-3 text-sm">
-        </div>
-
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Beranda</a>
-        <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Produk</a>
-        <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan') ? 'text-brand-blue font-bold' : 'text-gray-700 font-medium hover:text-brand-blue' }}">Layanan</a>
-
-        <hr class="border-gray-100">
-
-        @auth
-            <div class="py-2 flex flex-col">
-                <span class="text-gray-600 text-sm">Selamat datang,</span>
-                <span class="font-semibold text-lg text-gray-900 mb-2">{{ Auth::user()->name }}</span>
-
-                <a href="{{ route('profile') }}" class="text-sm font-medium text-brand-blue hover:text-brand-dark flex items-center gap-2">
-                    <i class="fa-solid fa-gear"></i> Pengaturan Akun
-                </a>
-
-                <form action="{{ route('logout') }}" method="POST" class="mt-3">
-                    @csrf
-                    <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-700 flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-                    </button>
-                </form>
-            </div>
-        @else
-            <div class="flex justify-between items-center py-2">
-                <span class="text-gray-600 font-medium">Status</span>
-                <a href="{{ route('login') }}" class="text-brand-blue font-semibold hover:underline">
-                    Masuk / Daftar
-                </a>
-            </div>
-        @endauth
-    </div>
-</nav>
+    </nav>
     <main>
 
         <section class="w-full px-6 md:px-12 lg:px-16 pt-24 pb-16">
@@ -182,13 +200,15 @@
 
                 <div class="order-2">
                     <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
-                        Solusi Cetak <span class="text-brand-blue">Profesional</span> dan <span class="text-brand-dark">Terpercaya</span>
+                        Solusi Cetak <span class="text-brand-blue">Profesional</span> dan <span
+                            class="text-brand-dark">Terpercaya</span>
                     </h1>
                     <p class="text-gray-600 text-lg leading-relaxed mb-7">
                         Kami hadir untuk membantu Anda menghasilkan produk berkualitas tinggi,
                         mulai dari kebutuhan bisnis, promosi, hingga souvenir dengan hasil maksimal.
                     </p>
-                    <a href="{{ route('product.index') }}" class="px-6 py-3 bg-brand-blue text-white font-semibold rounded-lg shadow hover:bg-brand-dark transition">
+                    <a href="{{ route('product.index') }}"
+                        class="px-6 py-3 bg-brand-blue text-white font-semibold rounded-lg shadow hover:bg-brand-dark transition">
                         Pesan Sekarang →
                     </a>
                 </div>
@@ -233,15 +253,18 @@
             <div class="grid md:grid-cols-3 gap-8">
 
                 <div class="rounded-xl overflow-hidden shadow border hover:shadow-lg transition">
-                    <img src="{{ asset('assets/cetak.jpg') }}" class="w-full h-48 object-cover" alt="Cetak Offset & Digital">
+                    <img src="{{ asset('assets/cetak.jpg') }}" class="w-full h-48 object-cover"
+                        alt="Cetak Offset & Digital">
                     <div class="p-5">
                         <h3 class="font-bold text-lg">Cetak Offset & Digital</h3>
-                        <p class="text-gray-600 text-sm mt-2">Cetak brosur, poster, booklet, dan kebutuhan bisnis lainnya.</p>
+                        <p class="text-gray-600 text-sm mt-2">Cetak brosur, poster, booklet, dan kebutuhan bisnis
+                            lainnya.</p>
                     </div>
                 </div>
 
                 <div class="rounded-xl overflow-hidden shadow border hover:shadow-lg transition">
-                    <img src="{{ asset('assets/souvenir.jpg') }}" class="w-full h-48 object-cover" alt="Souvenir & Merchandise">
+                    <img src="{{ asset('assets/souvenir.jpg') }}" class="w-full h-48 object-cover"
+                        alt="Souvenir & Merchandise">
                     <div class="p-5">
                         <h3 class="font-bold text-lg">Souvenir & Merchandise</h3>
                         <p class="text-gray-600 text-sm mt-2">Merchandise custom untuk event, kantor, dan komunitas.</p>
@@ -267,7 +290,8 @@
                 <div>
                     <div class="text-5xl mb-3">⭐</div>
                     <h3 class="font-semibold text-lg">Produk Berkualitas Tinggi</h3>
-                    <p class="text-gray-600 text-sm mt-2">Menggunakan material dan mesin terbaik untuk hasil maksimal.</p>
+                    <p class="text-gray-600 text-sm mt-2">Menggunakan material dan mesin terbaik untuk hasil maksimal.
+                    </p>
                 </div>
 
                 <div>
@@ -299,10 +323,12 @@
                         pelayanan tercepat.
                     </p>
                     <div class="flex items-center gap-5">
-                        <a href="#" class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
+                        <a href="#"
+                            class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
                             <i class="fa-brands fa-instagram text-lg"></i> designplus
                         </a>
-                        <a href="#" class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
+                        <a href="#"
+                            class="flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-brand-dark transition">
                             <i class="fa-brands fa-facebook text-lg"></i> designPlus
                         </a>
                     </div>
@@ -310,7 +336,8 @@
 
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-5 flex items-center gap-2">
-                        <span class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue text-sm">
+                        <span
+                            class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue text-sm">
                             <i class="fa-solid fa-address-book"></i>
                         </span>
                         Kontak
@@ -334,7 +361,8 @@
                 <div class="w-full">
                     <h3 class="font-bold text-gray-900 text-lg mb-5">Lokasi Kami</h3>
                     <div class="rounded-xl overflow-hidden shadow-sm border border-gray-200 h-[200px] bg-gray-200">
-                        <iframe src="https://maps.google.com/maps?q=Bekasi&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://maps.google.com/maps?q=Bekasi&output=embed" width="100%" height="100%"
+                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>

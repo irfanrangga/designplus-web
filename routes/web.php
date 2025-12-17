@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController; // Tambahkan ini
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +27,12 @@ Route::get('/layanan', function () {
 })->name('layanan');
 
 Route::get('/product-detail', function () {
-    return view('product-detail'); 
+    return view('product-detail');
 })->name('product-detail');
+
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
 
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
@@ -70,6 +76,13 @@ Route::middleware('auth')->group(function () {
 
     // Rute ini sudah benar
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
 });
 
 Route::get('/payment', [PaymentController::class, 'index']);

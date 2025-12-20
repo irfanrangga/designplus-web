@@ -6,17 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use App\Models\Wishlist;
 
 class ProfileController extends Controller
-{
-    /**
-     * Menampilkan halaman profile.
-     */
+{  
     public function index()
-    {
-        // Karena view ini mandiri, kita hanya mengembalikan nama view-nya.
-        return view('profile');
-    }
+{
+    // ambil data wishlist milik user yang sedang login beserta data produknya
+    $wishlists = Wishlist::with('product')
+                ->where('user_id', Auth::id())
+                ->latest()
+                ->get();
+
+    return view('profile', compact('wishlists')); // kirim variabel $wishlists ke view
+}
 
     /**
      * Menyimpan pembaruan data User Info (Informasi Pribadi).

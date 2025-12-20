@@ -5,6 +5,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController; // Tambahkan ini
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +30,16 @@ Route::get('/product-detail', function () {
     return view('product-detail');
 })->name('product-detail');
 
+<<<<<<< HEAD
+=======
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
+
+>>>>>>> 9af4464b49491cb6de45a01fa7cd3ea9461b25cc
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +79,17 @@ Route::middleware('auth')->group(function () {
 
     // Rute ini sudah benar
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
 });
+<<<<<<< HEAD
+=======
+
+Route::get('/payment', [PaymentController::class, 'index']);
+Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
+>>>>>>> 9af4464b49491cb6de45a01fa7cd3ea9461b25cc

@@ -22,14 +22,10 @@ Route::get('/layanan', function () {
     return view('layanan');
 })->name('layanan');
 
-<<<<<<< Updated upstream
 Route::get('/product-detail', function () {
-    return view('product-detail'); 
+    return view('product-detail');
 })->name('product-detail');
 
-Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-=======
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
@@ -74,4 +70,3 @@ Route::middleware('auth')->group(function () {
     // Rute ini sudah benar
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 });
->>>>>>> Stashed changes

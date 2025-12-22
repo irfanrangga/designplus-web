@@ -8,11 +8,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-
+        $products = Product::latest()->paginate(12);
         return view('product-page', compact('products'));
     }
-    
+
     public function show($id)
     {
         $product = Product::findOrFail($id);

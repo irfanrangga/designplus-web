@@ -125,6 +125,24 @@
                                                     {{ $item->product->nama }}
                                                 </h3>
                                                 <p class="mt-1 text-sm text-gray-500">{{ $item->product->kategori }}</p>
+                                                
+                                                <!-- Detail Produk -->
+                                                <div class="mt-3 space-y-1 text-xs sm:text-sm text-gray-600">
+                                                    @if($item->material)
+                                                        <p><span class="font-semibold">Bahan:</span> {{ $item->material }}</p>
+                                                    @endif
+                                                    @if($item->warna)
+                                                        <p><span class="font-semibold">Warna:</span> {{ $item->warna }}</p>
+                                                    @endif
+                                                    @if($item->custom_file && $item->custom_file !== 'Standard')
+                                                        <p><span class="font-semibold">Desain:</span> Custom (<a href="{{ asset('storage/' . $item->custom_file) }}" target="_blank" class="text-brand-blue hover:underline">Lihat File</a>)</p>
+                                                    @else
+                                                        <p><span class="font-semibold">Desain:</span> Standard</p>
+                                                    @endif
+                                                    @if($item->note)
+                                                        <p><span class="font-semibold">Catatan:</span> {{ $item->note }}</p>
+                                                    @endif
+                                                </div>
                                             </div>
 
                                             <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
@@ -150,8 +168,9 @@
                                             </button>
 
                                             <input type="number" id="qty-{{ $item->id }}" value="{{ $item->quantity }}"
+                                                min="1"
                                                 class="w-10 h-8 text-center text-sm border-none focus:ring-0 text-gray-900 bg-white"
-                                                readonly>
+                                                onchange="updateQuantityDirectly({{ $item->id }})">
 
                                             <button type="button" onclick="updateQuantity({{ $item->id }}, 1)"
                                                 class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition bg-white">
@@ -206,11 +225,14 @@
                                 <span class="text-xl font-bold text-brand-blue" id="summary-total">Rp 0</span>
                             </div>
 
-                            <a href="/checkout"
-                                class="w-full bg-brand-blue hover:bg-brand-dark text-white font-semibold py-3.5 px-4 rounded-lg transition-colors duration-200 shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">
-                                <span>Lanjut ke Pembayaran</span>
-                                <i class="fa-solid fa-arrow-right text-sm"></i>
-                            </a>
+                            <form action="{{ route('checkout.process') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full bg-brand-blue hover:bg-brand-dark text-white font-semibold py-3.5 px-4 rounded-lg transition-colors duration-200 shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">
+                                    <span>Lanjut ke Pembayaran</span>
+                                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                                </button>
+                            </form>
 
                             <div class="mt-4 flex items-center justify-center gap-2 text-gray-400 text-xs">
                                 <i class="fa-solid fa-shield-halved"></i>
@@ -280,8 +302,7 @@
             }
 
             debounceTimers[itemId] = setTimeout(() => {
-
-                fetch(`/cart/update/${itemId}`, {
+                fetch(`/cart/${itemId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -294,7 +315,7 @@
                     })
                 })
                     .then(response => {
-                        if (!response.ok) throw new Error('Network response was not ok');
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
                         return response.json();
                     })
                     .then(data => {
@@ -310,8 +331,56 @@
                         console.error('Error:', error);
                         input.value = currentQty;
                         calculateGrandTotal();
+                        alert('Terjadi kesalahan: ' + error.message);
                     });
+            }, 500);
+        }
 
+        function updateQuantityDirectly(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            let newQty = parseInt(input.value);
+
+            if (newQty < 1) {
+                input.value = 1;
+                newQty = 1;
+            }
+
+            calculateGrandTotal();
+
+            if (debounceTimers[itemId]) {
+                clearTimeout(debounceTimers[itemId]);
+            }
+
+            debounceTimers[itemId] = setTimeout(() => {
+                fetch(`/cart/${itemId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        quantity: newQty,
+                        _method: 'PATCH'
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data.success) {
+                            alert('Gagal mengupdate keranjang');
+                            location.reload();
+                        } else {
+                            console.log('Update sukses');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan: ' + error.message);
+                        location.reload();
+                    });
             }, 500);
         }
 

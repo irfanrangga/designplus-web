@@ -11,8 +11,15 @@ class Product extends Model
 
     protected $table = 'products';
     protected $primaryKey = 'id';
-    protected $fillable = ['nama', 'harga', 'kategori', 'file', 'rating'];
+    protected $fillable = ['nama', 'harga', 'kategori', 'stok', 'bahan', 'warna', 'file', 'rating'];
 
+    public const Bahan = [
+        'Fashion' => ['Katun Combed 24s', 'Polyester', 'Dry Fit'],
+        'Percetakan' => ['Flexi China', 'Flexi Jerman', 'Vinyl', 'PVC', 'Kertas HVS', 'Kertas Doff', 'Kertas Art Paper'],
+        'Desain Grafis' => ['Art Paper', 'Ivory', 'HVS', 'Matt Paper'],
+        'Alat Tulis' => ['Kertas HVS', 'Kertas Doff', 'Kertas Art Paper'],
+        'Merchandise' => ['Acrylic', 'Enamel', 'Metal'],
+    ];
     // mengecek apakah user sudah like atau belum di halaman katalog.
     public function favoritedBy()
     {

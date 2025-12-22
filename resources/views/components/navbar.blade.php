@@ -1,18 +1,9 @@
-<nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b border-gray-100 h-[80px]">
+<nav class="fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md shadow-sm z-50 border-b border-gray-100 h-[80px]">
     <div class="h-full px-6 lg:px-10 flex items-center justify-between">
 
         <a href="{{ route('home') }}" class="text-2xl font-bold text-brand-blue tracking-tighter shrink-0 mr-8">
             Designplus.
         </a>
-
-        <div class="hidden lg:flex flex-grow justify-center max-w-[600px] mx-auto">
-            <div
-                class="flex items-center w-full bg-brand-light rounded-xl px-4 py-2.5 transition focus-within:ring-2 focus-within:ring-brand-blue/20">
-                <i class="fa-solid fa-magnifying-glass text-gray-400 text-lg"></i>
-                <input type="text" placeholder="Cari produk"
-                    class="w-full bg-transparent border-none outline-none ml-3 text-sm text-gray-700 placeholder-gray-500">
-            </div>
-        </div>
 
         <div class="hidden lg:flex items-center gap-8 ml-8">
             <ul class="flex items-center gap-6 text-[15px] font-medium text-gray-600">
@@ -39,7 +30,7 @@
             <div class="h-6 w-px bg-gray-200"></div>
 
             <div class="flex items-center gap-6">
-                <a href="#" class="text-xl text-gray-700 hover:text-brand-blue transition">
+                <a href="{{ route('cart') }}" class="text-xl text-gray-700 hover:text-brand-blue transition">
                     <i class="fa-solid fa-cart-shopping"></i>
                 </a>
 
@@ -59,6 +50,12 @@
                                 class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition">
                                 <i class="fa-solid fa-gear"></i> Profile
                             </a>
+                            @if (Auth::user()->name === 'Admin')
+                                <a href="{{ route('dashboard') }}"
+                                    class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md transition">
+                                    <i class="fa-solid fa-gauge"></i>Dashboard
+                                </a>
+                            @endif
 
                             <form action="{{ route('logout') }}" method="POST" class="w-full">
                                 @csrf

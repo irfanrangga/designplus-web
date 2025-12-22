@@ -13,6 +13,10 @@ class Cart extends Model
         'user_id',
         'product_id',
         'quantity',
+        'material',
+        'warna',
+        'custom_file',
+        'note',
         'is_selected'
     ];
 

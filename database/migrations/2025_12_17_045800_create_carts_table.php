@@ -16,6 +16,7 @@ return new class extends Migration
             // Menghubungkan cart dengan produk yang dibeli
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->string('material')->nullable();
+            $table->string('warna')->nullable();
             $table->string('custom_file')->nullable();
             // Jumlah barang
             $table->integer('quantity')->default(1);

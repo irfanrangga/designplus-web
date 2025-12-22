@@ -23,7 +23,7 @@ return new class extends Migration
 
             // Menyimpan opsi bahan yang dipilih dari radio button sebelumnya
             $table->string('bahan');
-
+            $table->string('warna');
             $table->integer('quantity');
             $table->decimal('subtotal', 12, 2);
 

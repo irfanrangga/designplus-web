@@ -150,8 +150,7 @@
                                             </button>
 
                                             <input type="number" id="qty-{{ $item->id }}" value="{{ $item->quantity }}"
-                                                class="w-10 h-8 text-center text-sm border-none focus:ring-0 text-gray-900 bg-white"
-                                                readonly>
+                                                class="w-10 h-8 text-center text-sm border-none focus:ring-0 text-gray-900 bg-white">
 
                                             <button type="button" onclick="updateQuantity({{ $item->id }}, 1)"
                                                 class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition bg-white">

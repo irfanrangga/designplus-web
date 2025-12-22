@@ -289,14 +289,11 @@
             document.getElementById('cancel-modal').classList.remove('hidden');
         }
 
-        // 2. Fungsi Tutup Modal (Jika klik Tidak)
         function closeModal() {
             document.getElementById('cancel-modal').classList.add('hidden');
         }
 
-        // 3. Fungsi Konfirmasi Batal (Jika klik Ya)
         function confirmCancel() {
-            // Arahkan user kembali ke Home atau halaman produk
             window.location.href = '/'; 
         }
     </script>

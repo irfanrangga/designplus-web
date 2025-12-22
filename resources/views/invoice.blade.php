@@ -152,7 +152,6 @@
     </div>
 
     <script>
-        // Fungsi Copy VA (Yang sudah ada)
         function copyToClipboard() {
             const vaNumber = document.getElementById('va-number').innerText;
             navigator.clipboard.writeText(vaNumber).then(() => {
@@ -162,22 +161,19 @@
             });
         }
 
-        // TAMBAHAN: Fungsi Toggle Detail Pesanan
         function toggleDetails() {
             const details = document.getElementById('order-details');
             const btnText = document.querySelector('#btn-toggle span');
             const icon = document.getElementById('icon-arrow');
 
             if (details.classList.contains('hidden')) {
-                // Buka
                 details.classList.remove('hidden');
                 btnText.innerText = "Tutup Detail Pesanan";
-                icon.classList.add('rotate-180'); // Putar panah ke atas
+                icon.classList.add('rotate-180');
             } else {
-                // Tutup
                 details.classList.add('hidden');
                 btnText.innerText = "Lihat Detail Pesanan";
-                icon.classList.remove('rotate-180'); // Putar panah ke bawah
+                icon.classList.remove('rotate-180');
             }
         }
     </script>

@@ -39,6 +39,7 @@ Route::get('/profile', function () {
 Route::get('/dashboard', function () {
     return redirect(config('filament.path', 'admin'));
 })->name('dashboard');
+
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
@@ -94,4 +95,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/payment', [PaymentController::class, 'index']);
 Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
 
-// Note: checkout route is registered inside the auth middleware group as POST /checkout

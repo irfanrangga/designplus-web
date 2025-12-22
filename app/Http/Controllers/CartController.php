@@ -36,24 +36,42 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'nullable|integer|min:1'
+            'quantity'   => 'nullable|integer|min:1',
+            'material'   => 'required|string',
+            'warna'      => 'nullable|string',
+            'file'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'note'       => 'nullable|string'
         ]);
 
         $userId = Auth::id();
         $productId = $request->product_id;
         $qty = $request->quantity ?? 1;
-
+        $material = $request->material;
+        $warna = $request->warna;
+        $note = $request->note;
+        $filePath = 'Standard';
+        if ($request->hasFile('custom_file')) {
+            // Simpan di folder 'custom_uploads' dalam storage public
+            $filePath = $request->file('custom_file')->store('custom_uploads', 'public');
+        }
+        
         $existingCart = Cart::where('user_id', $userId)
             ->where('product_id', $productId)
+            ->where('material', $material)
+            ->where('warna', $warna)
             ->first();
 
         if ($existingCart) {
             $existingCart->increment('quantity', $qty);
         } else {
             Cart::create([
-                'user_id' => $userId,
-                'product_id' => $productId,
-                'quantity' => $qty,
+                'user_id'     => $userId,
+                'product_id'  => $productId,
+                'quantity'    => $qty,
+                'material'    => $material,   // Simpan Bahan
+                'warna'       => $warna,      // Simpan Warna
+                'custom_file' => $filePath,   // Simpan Path File
+                'note'        => $note,       // Simpan Catatan
                 'is_selected' => true
             ]);
         }

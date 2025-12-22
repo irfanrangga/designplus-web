@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController; // Tambahkan ini
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -31,6 +32,11 @@ Route::get('/product-detail', function () {
 Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
+
+// Dashboard route: redirect to Filament admin panel path
+Route::get('/dashboard', function () {
+    return redirect(config('filament.path', 'admin'));
+})->name('dashboard');
 
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
@@ -77,8 +83,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
-    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 });
+
+Route::get('/payment', [PaymentController::class, 'index']);
+Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
+

@@ -90,6 +90,3 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/payment', [PaymentController::class, 'index']);
-Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
-

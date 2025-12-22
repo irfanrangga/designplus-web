@@ -15,6 +15,10 @@ return new class extends Migration {
             $table->string('nama');
             $table->integer('harga'); 
             $table->string('kategori');
+            $table->string('bahan')->nullable();
+            $table->string('warna')->nullable();
+            $table->integer('stok')->default(0);
+            $table->integer('terjual')->default(0);
             $table->string('file'); 
             $table->float('rating', 2); 
             $table->timestamps();

@@ -5,8 +5,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController; // Tambahkan ini
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;

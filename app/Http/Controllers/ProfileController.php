@@ -7,18 +7,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Models\Wishlist;
+use App\Models\Order;
 
 class ProfileController extends Controller
 {  
     public function index()
 {
+    $user = Auth::user();
     // ambil data wishlist milik user yang sedang login beserta data produknya
     $wishlists = Wishlist::with('product')
                 ->where('user_id', Auth::id())
                 ->latest()
                 ->get();
+    
+    $orders = Order::with('items.product')
+                    ->where('user_id', $user->id)
+                    ->latest()
+                    ->get();            
 
-    return view('profile', compact('wishlists')); // kirim variabel $wishlists ke view
+    return view('profile', compact('wishlists', 'orders'));
 }
 
     /**

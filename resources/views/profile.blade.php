@@ -88,6 +88,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('profile', ['page' => 'riwayat-pesanan']) }}" class="flex items-center gap-3 p-3 rounded-lg transition {{ $isActive('riwayat-pesanan') }}">
+                            <i class="fa-solid fa-clock-rotate-left text-lg"></i> Riwayat Pesanan
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('profile', ['page' => 'pengaturan']) }}" class="flex items-center gap-3 p-3 rounded-lg transition {{ $isActive('pengaturan') }}">
                             <i class="fa-solid fa-gear text-lg"></i> Pengaturan
                         </a>
@@ -300,6 +305,95 @@
                             @endforelse
                         </div>
                     </div>
+                @break
+
+                {{-- ========================================================== --}}
+                {{-- KONTEN BARU: RIWAYAT PESANAN --}}
+                {{-- ========================================================== --}}
+                @case('riwayat-pesanan')
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Riwayat Pesanan</h2>
+
+                    <div class="space-y-6">
+                        @forelse($orders as $order)
+                            <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow duration-300">
+                                {{-- Header Card: No Invoice & Status --}}
+                                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-gray-100 pb-4 mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <span class="font-mono text-sm font-bold text-gray-500">#{{ $order->number }}</span>
+                                            <span class="text-xs text-gray-400">• {{ $order->created_at->format('d M Y, H:i') }}</span>
+                                        </div>
+                                        
+                                        {{-- Logic Status Badge --}}
+                                        @if($order->payment_status == '2')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <i class="fa-solid fa-check-circle mr-1"></i> Lunas
+                                            </span>
+                                        @elseif($order->payment_status == '3')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                <i class="fa-solid fa-circle-xmark mr-1"></i> Expired / Batal
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 animate-pulse">
+                                                <i class="fa-solid fa-clock mr-1"></i> Menunggu Pembayaran
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    {{-- Tombol Aksi --}}
+                                    <div>
+                                        @if($order->payment_status == '1')
+                                            <a href="{{ route('payment.show', $order->id) }}" 
+                                               class="inline-block px-4 py-2 bg-brand-blue text-white text-sm font-bold rounded-lg hover:bg-brand-dark transition shadow-sm shadow-blue-300">
+                                                Bayar Sekarang
+                                            </a>
+                                        @else
+                                            <a href="{{ route('payment.show', $order->id) }}" 
+                                               class="inline-block px-4 py-2 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition">
+                                                Lihat Detail
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- List Barang (Preview) --}}
+                                <div class="space-y-3">
+                                    @foreach($order->items as $item)
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 border border-gray-200">
+                                                @if($item->product)
+                                                    <img src="{{ asset($item->product->file) }}" class="w-full h-full object-cover">
+                                                @else
+                                                    <div class="flex items-center justify-center h-full text-gray-400"><i class="fa-solid fa-image"></i></div>
+                                                @endif
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="text-sm font-semibold text-gray-900 line-clamp-1">{{ $item->product_name }}</h4>
+                                                <p class="text-xs text-gray-500">{{ $item->quantity }} x Rp {{ number_format($item->product_price, 0, ',', '.') }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                {{-- Footer Card: Total Harga --}}
+                                <div class="mt-4 pt-3 border-t border-dashed border-gray-100 flex justify-between items-center">
+                                    <span class="text-sm text-gray-500">Total Tagihan</span>
+                                    <span class="text-lg font-bold text-brand-blue">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+
+                        @empty
+                            <div class="col-span-full text-center py-10 border border-dashed border-gray-300 rounded-xl bg-gray-50">
+                                <i class="fa-solid fa-clipboard-list text-5xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600 font-medium">Belum ada riwayat pesanan.</p>
+                                <a href="{{ route('product.index') }}" class="text-brand-blue hover:underline text-sm mt-2 block">
+                                    Mulai Belanja Sekarang
+                                </a>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
                 @break
 
                 {{-- KONTEN 4: NOTIFIKASI --}}

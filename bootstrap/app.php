@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->validateCsrfTokens(except: [
+            'webhook/xendit', // Kecualikan route ini dari proteksi CSRF
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

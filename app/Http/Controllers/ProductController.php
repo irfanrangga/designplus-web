@@ -3,18 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product; 
+use App\Models\Product;
+use Illuminate\Support\Facades\Http;
 class ProductController extends Controller
 {
+    private $apiURL = 'https:/localhost:3000/v1/api/products';
+
     public function index()
     {
-        $products = Product::latest()->paginate(12);
+        $response = Http::get($this->apiURL);
+        $products = $response->json()['data'] ?? [];
+
         return view('product-page', compact('products'));
     }
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('product-detail', compact('product'));
+        $response = Http::get($this->apiURL);
+
+        $product = $response->json()['data'][$id - 1] ?? null;
+
+        if(!$product) {
+            abort(404);
+        }
+        return view('product-detail', compact('products'));
     }
 }

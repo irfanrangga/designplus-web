@@ -128,12 +128,6 @@
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="quantity" value="1">
-
-                                    <button type="submit"
-                                        class="w-10 h-10 rounded-full bg-brand-light text-brand-blue border border-transparent hover:bg-brand-blue hover:text-white hover:shadow-md hover:border-brand-blue flex items-center justify-center transition-all duration-200"
-                                        title="Tambah ke Keranjang">
-                                        <i class="fa-solid fa-cart-plus text-sm"></i>
-                                    </button>
                                 </form>
 
                             </div>

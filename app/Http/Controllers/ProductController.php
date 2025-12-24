@@ -7,12 +7,12 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Http;
 class ProductController extends Controller
 {
-    private $apiURL = 'https:/localhost:3000/v1/api/products';
+    private $apiURL = 'http://localhost:3000/v1/api/products';
 
     public function index()
     {
         $response = Http::get($this->apiURL);
-        $products = $response->json()['data'] ?? [];
+        $products = $response->object() ?? [];
 
         return view('product-page', compact('products'));
     }
@@ -21,9 +21,8 @@ class ProductController extends Controller
     {
         $response = Http::get($this->apiURL);
 
-        $product = $response->json()['data'][$id - 1] ?? null;
-
-        if(!$product) {
+        $products = $response->object() ?? [];
+        if (!$products) {
             abort(404);
         }
         return view('product-detail', compact('products'));

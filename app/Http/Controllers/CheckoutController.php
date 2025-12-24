@@ -28,7 +28,7 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $cartItems = collect();
 
-        // 1. Logika Pengambilan Item (Sama seperti sebelumnya)
+        // 1. Logika Pengambilan Item
         if ($request->filled('product_id')) {
             $productId = $request->input('product_id');
             $quantity = max(1, (int) $request->input('quantity', 1));
@@ -134,8 +134,8 @@ class CheckoutController extends Controller
                 'amount' => $grandTotal,
                 'payer_email' => $user->email,
                 'description' => 'Pembayaran Order ' . $orderNumber,
-                'invoice_duration' => 43200, // 12 jam
-                'success_redirect_url' => route('home'), // <-- Redirect ke Home setelah sukses
+                'invoice_duration' => 43200,
+                'success_redirect_url' => route('home'),
                 'failure_redirect_url' => route('payment.show', $order->id),
                 'currency' => 'IDR'
             ]);
@@ -172,6 +172,29 @@ class CheckoutController extends Controller
     public function show($id)
     {
         $order = Order::with('items')->where('user_id', Auth::id())->findOrFail($id);
+
+        // LOGIC TAMBAHAN: Auto-Expire saat halaman dibuka
+        // Jika status masih UNPAID (1)
+        if ($order->payment_status == '1') {
+            
+            // Tentukan durasi (Sesuaikan dengan settingan Xendit Anda, misal 10 detik atau 12 jam)
+            $expiredTime = $order->created_at->addHours(12); 
+            
+            // Jika nanti sudah production (12 jam), ganti jadi:
+            // $expiredTime = $order->created_at->addHours(12);
+
+            // Cek apakah waktu sekarang sudah melewatinya?
+            if (now() > $expiredTime) {
+                // Paksa update database jadi Expired
+                $order->update([
+                    'payment_status' => '3',       // Expired
+                    'order_status'   => 'cancelled'
+                ]);
+                
+                // Refresh data order agar tampilan di view langsung berubah
+                $order->refresh();
+            }
+        }
         
         return view('payment', compact('order'));
     }

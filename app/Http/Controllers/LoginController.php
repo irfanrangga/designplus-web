@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class LoginController extends Controller
 {
@@ -13,34 +17,61 @@ class LoginController extends Controller
         return view('login');
     }
 
+    
     // PROSES LOGIN
     public function authenticate(Request $request)
     {
-        // 1. VALIDASI INPUT
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $response = Http::post(
+            env('API_BASE_URL') . '/login',
+            $request->only('email', 'password')
+        );
 
-        // 2. COBA AUTENTIKASI
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            // Redirect ke intended URL atau default '/'
-            return redirect()->intended('/')->with('success', 'Selamat datang kembali!');
+        if ($response->failed()) {
+            return back()
+            ->withInput()
+            ->withErrors([
+                'email' => $response->json('message') ?? 'Email atau password salah'
+            ]);
         }
 
-        // 3. JIKA GAGAL
-        // Menggunakan 'loginError' dan withInput untuk mempertahankan email
-        return back()
-               ->withInput()
-               ->with('loginError', 'Kombinasi Email dan Password tidak ditemukan.');
+        $token = $response->json('token')
+                ?? $response->json('data.token');
+
+        if(!$token) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                'email' => 'Token tidak diterima dari API'
+                ]);
+        }
+
+        // Decode JWT untuk ambil role
+        $decoded = JWT::decode(
+            $token, 
+            new Key(env('JWT_SECRET'), 'HS256')
+        );
+
+        // Simpan ke session
+        Session::put('jwt_token', $token);
+        Session::put('user_role', $decoded->role);
+        Session::put('jwt_token', $token);
+        Session::put('user_id', $decoded->id);
+        Session::put('user_role', $decoded->role);
+        Session::put('user_name', $decoded->name ?? $decoded->email);
+        Session::put('user_email', $decoded->email);
+
+        return redirect()->route('home');
     }
 
     // LOGOUT
     public function logout(Request $request)
     {
-        Auth::logout();
+        $request->session()->forget([
+            'jwt_token',
+            'user_role',
+            'user_name',
+            'user_email',
+        ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

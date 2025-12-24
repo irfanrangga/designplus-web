@@ -26,7 +26,11 @@ class CheckoutController extends Controller
      */
     public function process(Request $request)
     {
-        $user = Auth::user();
+        $user = session('user_id');
+        // Support dua mode checkout:
+        // - Dari keranjang: tanpa product_id -> ambil item yang is_selected di cart
+        // - Direct purchase: ada product_id dari product-detail form
+
         $cartItems = collect();
 
         // 1. Logika Pengambilan Item
@@ -60,7 +64,7 @@ class CheckoutController extends Controller
             ]);
         } else {
             $cartItems = Cart::with('product')
-                ->where('user_id', $user->id)
+                ->where('user_id', session('user_id'))
                 ->where('is_selected', true)
                 ->get();
 
@@ -120,10 +124,10 @@ class CheckoutController extends Controller
 
         try {
             // A. Buat Order Header
-            $orderNumber = 'INV-' . date('YmdHis') . '-' . $user->id;
+            $orderNumber = 'INV-' . date('YmdHis') . '-' . session('user_id');
             
             $order = Order::create([
-                'user_id'        => $user->id,
+                'user_id'        => session('user_id'),
                 'number'         => $orderNumber,
                 'total_price'    => $grandTotal,
                 'payment_status' => '1', // Unpaid
@@ -188,7 +192,9 @@ class CheckoutController extends Controller
 
             // D. Hapus Cart
             if (! $request->filled('product_id')) {
-                Cart::where('user_id', $user->id)->where('is_selected', true)->delete();
+                Cart::where('user_id', session('user_id'))
+                    ->where('is_selected', true)
+                    ->delete();
             }
 
             DB::commit();

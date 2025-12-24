@@ -5,11 +5,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\WebhookController;
 
 
 
@@ -56,6 +55,7 @@ Route::middleware(['api.auth'])->group(function () {
     Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/payment/{id}', [CheckoutController::class, 'show'])->name('payment.show');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
     Route::get('/dashboard', function () {
@@ -63,6 +63,4 @@ Route::middleware(['api.auth'])->group(function () {
     })->name('dashboard');
 });
 
-Route::get('/payment', [PaymentController::class, 'index']);
-Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
-
+Route::post('/webhook/xendit', [WebhookController::class, 'handle'])->name('webhook.xendit');

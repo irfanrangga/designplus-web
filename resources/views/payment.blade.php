@@ -229,11 +229,15 @@
 
                 if (distance < 0) {
                     clearInterval(interval);
-                    timerElement.innerHTML = "WAKTU HABIS";
-                    timerElement.classList.add('text-red-500');
+                    timerElement.innerHTML = "MEMERIKSA STATUS...";
+                    timerElement.classList.remove('text-orange-700');
+                    timerElement.classList.add('text-red-600');
                     
-                    // Opsional: Reload halaman agar status berubah jadi expired (jika backend sudah handle)
-                    // location.reload(); 
+                    // Tambah delay 2 detik sebelum reload agar tidak kaget
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                    
                     return;
                 }
 

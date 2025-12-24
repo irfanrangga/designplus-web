@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        $userId = session('user_id');
 
         $cartItems = Cart::with('product')
             ->where('user_id', $userId)
@@ -43,7 +43,12 @@ class CartController extends Controller
             'note'       => 'nullable|string'
         ]);
 
-        $userId = Auth::id();
+        $userId = session('user_id');
+        if(!$userId) {
+            return redirect()->route('login')
+                ->withErrors(['auth' => 'silahkan login terlebih dahulu']);
+        }
+
         $productId = $request->product_id;
         $qty = $request->quantity ?? 1;
         $material = $request->material;
@@ -65,7 +70,7 @@ class CartController extends Controller
             $existingCart->increment('quantity', $qty);
         } else {
             Cart::create([
-                'user_id'     => $userId,
+                'user_id'     => session('user_id'),
                 'product_id'  => $productId,
                 'quantity'    => $qty,
                 'material'    => $material,   // Simpan Bahan
@@ -85,7 +90,7 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $cartItem = Cart::where('user_id', Auth::id())->where('id', $id)->firstOrFail();
+        $cartItem = Cart::where('user_id', session('user_id'))->where('id', $id)->firstOrFail();
 
         $cartItem->quantity = $request->quantity;
         $cartItem->save();
@@ -104,7 +109,7 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        $cartItem = Cart::where('user_id', Auth::id())->where('id', $id)->first();
+        $cartItem = Cart::where('user_id', session('user_id'))->where('id', $id)->first();
 
         if ($cartItem) {
             $cartItem->delete();

@@ -16,7 +16,7 @@ class CheckoutController extends Controller
      */
     public function process(Request $request)
     {
-        $user = Auth::user();
+        $user = session('user_id');
         // Support dua mode checkout:
         // - Dari keranjang: tanpa product_id -> ambil item yang is_selected di cart
         // - Direct purchase: ada product_id dari product-detail form
@@ -56,7 +56,7 @@ class CheckoutController extends Controller
         } else {
             // Checkout dari cart (biasa)
             $cartItems = Cart::with('product')
-                ->where('user_id', $user->id)
+                ->where('user_id', session('user_id'))
                 ->where('is_selected', true)
                 ->get();
 
@@ -84,8 +84,8 @@ class CheckoutController extends Controller
         try {
             // A. Buat Header Order
             $order = Order::create([
-                'user_id'        => $user->id,
-                'number'         => 'INV-' . date('YmdHis') . '-' . $user->id, // Contoh No Invoice
+                'user_id'        => session('user_id'),
+                'number'         => 'INV-' . date('YmdHis') . '-' . session('user_id'), // Contoh No Invoice
                 'total_price'    => $grandTotal,
                 'payment_status' => '1', // 1 = Unpaid (sesuai enum Anda)
                 'order_status'   => 'pending',
@@ -128,7 +128,7 @@ class CheckoutController extends Controller
             // C. Hapus item di keranjang yang sudah dipesan
             // Jika checkout dari cart, hapus item yang dipesan
             if (! $request->filled('product_id')) {
-                Cart::where('user_id', $user->id)
+                Cart::where('user_id', session('user_id'))
                     ->where('is_selected', true)
                     ->delete();
             }

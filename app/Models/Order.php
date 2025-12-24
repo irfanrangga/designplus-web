@@ -8,7 +8,7 @@ class Order extends Model
 {
     protected $table = 'orders';
     protected $fillable = [
-        'user_id', 'number', 'total_price', 'payment_status', 'order_status', 'snap_token'
+        'user_id', 'number', 'total_price', 'payment_status', 'order_status', 'snap_token', 'shipping_address', 'shipping_cost'
     ];
 
     //Order punya banyak item

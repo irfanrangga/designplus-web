@@ -174,6 +174,29 @@
                                 <span>{{ $order->created_at->format('d M Y, H:i') }}</span>
                             </div>
                             <div class="flex justify-between text-sm text-gray-600">
+                                <span>Tujuan</span>
+                                <span class="font-medium text-gray-900 text-right">{{ $order->shipping_address ?? '-' }}</span>
+                            </div>
+
+                            <hr class="border-dashed border-gray-200 my-2">
+
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Subtotal Barang</span>
+                                <span>Rp {{ number_format($order->items->sum('subtotal'), 0, ',', '.') }}</span>
+                            </div>
+                            
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Pajak (PPN 11%)</span>
+                                <span>Rp {{ number_format($order->items->sum('subtotal') * 0.11, 0, ',', '.') }}</span>
+                            </div>
+
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Ongkos Kirim</span>
+                                <span class="font-medium text-gray-900">
+                                    Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
                                 <span>Status</span>
                                 @if($order->payment_status == '2')
                                     <span class="text-green-600 font-bold bg-green-50 px-2 rounded">Lunas</span>
@@ -229,11 +252,15 @@
 
                 if (distance < 0) {
                     clearInterval(interval);
-                    timerElement.innerHTML = "WAKTU HABIS";
-                    timerElement.classList.add('text-red-500');
+                    timerElement.innerHTML = "MEMERIKSA STATUS...";
+                    timerElement.classList.remove('text-orange-700');
+                    timerElement.classList.add('text-red-600');
                     
-                    // Opsional: Reload halaman agar status berubah jadi expired (jika backend sudah handle)
-                    // location.reload(); 
+                    // Tambah delay 2 detik sebelum reload agar tidak kaget
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                    
                     return;
                 }
 

@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        $userId = session('user_id');
 
         $cartItems = Cart::with('product')
             ->where('user_id', $userId)
@@ -19,9 +19,25 @@ class CartController extends Controller
 
         $subtotal = 0;
 
+        // LOGIKA BARU: Loop untuk menyuntikkan harga final ke setiap item
         foreach ($cartItems as $item) {
             if ($item->product) {
-                $subtotal += $item->product->harga * $item->quantity;
+                // 1. Cek apakah ini Custom?
+                // Logic: Jika ada file (selain 'Standard') ATAU jika design_type di database tercatat custom
+                $isCustom = (!empty($item->custom_file) && strtolower($item->custom_file) !== 'standard');
+                
+                // 2. Tentukan Harga Satuan
+                $basePrice = $item->product->harga;
+                $finalPrice = $isCustom ? ($basePrice + 5000) : $basePrice;
+
+                // 3. Simpan harga final ini ke object item (agar bisa dibaca di View)
+                $item->final_price = $finalPrice;
+
+                // 4. Tambahkan ke Subtotal Global jika item dipilih
+                // (Asumsi semua dihitung, atau sesuaikan jika ada logika checkbox is_selected)
+                if ($item->is_selected ?? true) {
+                    $subtotal += $finalPrice * $item->quantity;
+                }
             }
         }
 
@@ -40,38 +56,52 @@ class CartController extends Controller
             'material'   => 'required|string',
             'warna'      => 'nullable|string',
             'file'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'note'       => 'nullable|string'
+            'note'       => 'nullable|string',
+            'design_type'=> 'nullable|string' 
         ]);
 
-        $userId = Auth::id();
+        $userId = session('user_id');
+        if(!$userId) {
+            return redirect()->route('login')
+                ->withErrors(['auth' => 'silahkan login terlebih dahulu']);
+        }
+
         $productId = $request->product_id;
         $qty = $request->quantity ?? 1;
         $material = $request->material;
         $warna = $request->warna;
         $note = $request->note;
-        $filePath = 'Standard';
-        if ($request->hasFile('custom_file')) {
-            // Simpan di folder 'custom_uploads' dalam storage public
-            $filePath = $request->file('custom_file')->store('custom_uploads', 'public');
-        }
         
+        $filePath = 'Standard'; // Default
+
+        // A. Jika User Upload File
+        if ($request->hasFile('custom_file')) {
+            $filePath = $request->file('custom_file')->store('custom_uploads', 'public');
+        } 
+        // B. Jika User Pilih Radio Button "Custom" tapi tidak upload file (misal request desain)
+        elseif ($request->input('design_type') === 'custom') {
+            $filePath = 'Custom Request'; 
+        }
+
+        // Cek Item Duplikat (Merge Quantity)
         $existingCart = Cart::where('user_id', $userId)
             ->where('product_id', $productId)
             ->where('material', $material)
             ->where('warna', $warna)
+            ->where('custom_file', $filePath) 
             ->first();
 
         if ($existingCart) {
             $existingCart->increment('quantity', $qty);
         } else {
             Cart::create([
-                'user_id'     => $userId,
+                'user_id'     => session('user_id'),
                 'product_id'  => $productId,
                 'quantity'    => $qty,
-                'material'    => $material,   // Simpan Bahan
-                'warna'       => $warna,      // Simpan Warna
-                'custom_file' => $filePath,   // Simpan Path File
-                'note'        => $note,       // Simpan Catatan
+                'material'    => $material,   
+                'warna'       => $warna,      
+                'custom_file' => $filePath,
+                'note'        => $note,       
                 'is_selected' => true
             ]);
         }
@@ -85,13 +115,18 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $cartItem = Cart::where('user_id', Auth::id())->where('id', $id)->firstOrFail();
+        $cartItem = Cart::where('user_id', session('user_id'))->where('id', $id)->firstOrFail();
 
         $cartItem->quantity = $request->quantity;
         $cartItem->save();
 
         if ($request->ajax() || $request->wantsJson()) {
-            $itemTotal = $cartItem->product->harga * $cartItem->quantity;
+            // Hitung ulang harga item total untuk response JSON (Update Realtime)
+            $isCustom = !empty($cartItem->custom_file) && strtolower($cartItem->custom_file) !== 'standard';
+            
+            $price = $isCustom ? ($cartItem->product->harga + 5000) : $cartItem->product->harga;
+            
+            $itemTotal = $price * $cartItem->quantity;
 
             return response()->json([
                 'success' => true,
@@ -104,12 +139,11 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        $cartItem = Cart::where('user_id', Auth::id())->where('id', $id)->first();
+        $cartItem = Cart::where('user_id', session('user_id'))->where('id', $id)->first();
 
         if ($cartItem) {
             $cartItem->delete();
         }
-
         return redirect()->back()->with('success', 'Item dihapus dari keranjang.');
     }
 }

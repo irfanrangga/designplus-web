@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use Xendit\Configuration;
 use Xendit\Invoice\InvoiceApi;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {
@@ -25,10 +26,14 @@ class CheckoutController extends Controller
      */
     public function process(Request $request)
     {
-        $user = Auth::user();
+        $user = session('user_id');
+        // Support dua mode checkout:
+        // - Dari keranjang: tanpa product_id -> ambil item yang is_selected di cart
+        // - Direct purchase: ada product_id dari product-detail form
+
         $cartItems = collect();
 
-        // 1. Logika Pengambilan Item (Sama seperti sebelumnya)
+        // 1. Logika Pengambilan Item
         if ($request->filled('product_id')) {
             $productId = $request->input('product_id');
             $quantity = max(1, (int) $request->input('quantity', 1));
@@ -55,11 +60,11 @@ class CheckoutController extends Controller
                 'warna' => $warna,
                 'design_type' => $designType,
                 'custom_file' => $customFilePath,
-                'note' => $request->input('note') // Tambahkan ini agar note terbawa
+                'note' => $request->input('note')
             ]);
         } else {
             $cartItems = Cart::with('product')
-                ->where('user_id', $user->id)
+                ->where('user_id', session('user_id'))
                 ->where('is_selected', true)
                 ->get();
 
@@ -68,62 +73,101 @@ class CheckoutController extends Controller
             }
         }
 
-        // 2. Hitung Total
+        // ============================================================
+        // 2. HITUNG TOTAL & HARGA SATUAN (Termasuk Biaya Custom)
+        // ============================================================
         $subtotal = 0;
+        
         foreach ($cartItems as $item) {
-            $subtotal += ($item->product->harga * $item->quantity);
+            $basePrice = $item->product->harga;
+            
+            // Cek apakah item ini Custom?
+            $isCustom = (isset($item->design_type) && $item->design_type === 'custom') || 
+                        (!empty($item->custom_file) && strtolower($item->custom_file) !== 'standard');
+
+            // Jika Custom, tambah Rp 5.000
+            $finalUnitPrice = $isCustom ? ($basePrice + 5000) : $basePrice;
+            
+            // SIMPAN harga final ini ke object item agar bisa dipakai saat create OrderItem nanti
+            $item->final_price = $finalUnitPrice;
+            
+            $qty = $item->quantity;
+            $subtotal += ($finalUnitPrice * $qty);
         }
+
+        // ============================================================
+        // 3. INTEGRASI NODE.JS UNTUK ONGKIR
+        // ============================================================
+        $shippingCost = 0;
+        $userLocation = $user->location ?? 'Jakarta'; 
+
+        try {
+            // Tembak API Node.js
+            $response = Http::post('http://localhost:3000/v1/api/shipping/cost', [
+                'city' => $userLocation,
+            ]);
+
+            if ($response->successful()) {
+                $shippingCost = $response->json()['data']['cost'];
+            } else {
+                $shippingCost = 50000; // Fallback default
+            }
+        } catch (\Exception $e) {
+            $shippingCost = 0; // Fallback error connection
+        }
+
+        // Hitung Grand Total
         $tax = $subtotal * 0.11;
-        $grandTotal = $subtotal + $tax;
+        $grandTotal = $subtotal + $tax + $shippingCost;
 
         DB::beginTransaction();
 
         try {
-            // A. Buat Order Lokal
-            $orderNumber = 'INV-' . date('YmdHis') . '-' . $user->id;
+            // A. Buat Order Header
+            $orderNumber = 'INV-' . date('YmdHis') . '-' . session('user_id');
             
             $order = Order::create([
-                'user_id'        => $user->id,
+                'user_id'        => session('user_id'),
                 'number'         => $orderNumber,
                 'total_price'    => $grandTotal,
                 'payment_status' => '1', // Unpaid
                 'order_status'   => 'pending',
+                'shipping_address' => $userLocation, 
+                'shipping_cost'    => $shippingCost,
             ]);
 
-            // B. Simpan Item
+            // B. Simpan Item (Order Items)
             foreach ($cartItems as $cart) {
-                // ... (Logika mapping item sama seperti kode Anda sebelumnya)
                 $productId = $cart->product_id ?? $cart->product->id;
                 $product = $cart->product;
-                $noteParts = [];
-                if (!empty($cart->design_type)) $noteParts[] = 'Desain: ' . $cart->design_type;
-                if (!empty($cart->note)) $noteParts[] = $cart->note;
-                $note = count($noteParts) ? implode("\n", $noteParts) : null;
 
-                // 1. Ambil data
+                $savedPrice = $cart->final_price; 
                 $customFile = $cart->custom_file ?? null;
-
-                // [TAMBAHAN BARU] Cek apakah user sebenarnya memilih Standard?
-                // Jika design_type standard, paksa custom_file jadi NULL
+                
                 if (isset($cart->design_type) && strtolower($cart->design_type) == 'standard') {
                     $customFile = null;
                 }
-                // Atau jika file kosong/string kosong
+                // Hapus jika kosong/null text
                 if (empty($customFile)) {
                     $customFile = null;
                 }
+
+                // Generate Note Otomatis
+                $noteParts = [];              
+                if (!empty($cart->note)) $noteParts[] = $cart->note;
+                $note = count($noteParts) ? implode("\n", $noteParts) : null;
 
                 OrderItem::create([
                     'order_id'      => $order->id,
                     'product_id'    => $productId,
                     'product_name'  => $product->nama,
-                    'product_price' => $product->harga,
+                    'product_price' => $savedPrice, // Gunakan harga final (+5000)
                     'bahan'         => $cart->material ?? $cart->bahan ?? null,
                     'warna'         => $cart->warna ?? null,
                     'quantity'      => $cart->quantity,
-                    'custom_file'   => $cart->custom_file ?? null,
+                    'custom_file'   => $customFile, // Gunakan variabel yang sudah disanitasi
                     'note'          => $note,
-                    'subtotal'      => $product->harga * $cart->quantity,
+                    'subtotal'      => $savedPrice * $cart->quantity, // Hitung subtotal dengan harga final
                 ]);
             }
 
@@ -134,33 +178,31 @@ class CheckoutController extends Controller
                 'amount' => $grandTotal,
                 'payer_email' => $user->email,
                 'description' => 'Pembayaran Order ' . $orderNumber,
-                'invoice_duration' => 43200, // 12 jam
-                'success_redirect_url' => route('home'), // <-- Redirect ke Home setelah sukses
+                'invoice_duration' => 43200, // 12 Jam
+                'success_redirect_url' => route('home'),
                 'failure_redirect_url' => route('payment.show', $order->id),
                 'currency' => 'IDR'
             ]);
 
-            // Panggil API Xendit
             $invoice = $apiInstance->createInvoice($create_invoice_request);
 
-            // Simpan Link Pembayaran Xendit ke kolom 'snap_token'
             $order->update([
                 'snap_token' => $invoice['invoice_url']
             ]);
 
-            // D. Hapus Cart jika bukan direct purchase
+            // D. Hapus Cart
             if (! $request->filled('product_id')) {
-                Cart::where('user_id', $user->id)->where('is_selected', true)->delete();
+                Cart::where('user_id', session('user_id'))
+                    ->where('is_selected', true)
+                    ->delete();
             }
 
             DB::commit();
 
-            // Redirect ke halaman Pembayaran (Show)
             return redirect()->route('payment.show', $order->id);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            // Log error untuk debugging
             \Illuminate\Support\Facades\Log::error('Checkout Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Gagal memproses pesanan: ' . $e->getMessage());
         }
@@ -172,6 +214,20 @@ class CheckoutController extends Controller
     public function show($id)
     {
         $order = Order::with('items')->where('user_id', Auth::id())->findOrFail($id);
+
+        // Auto-Expire saat halaman dibuka
+        if ($order->payment_status == '1') {
+            // Ubah ke addSeconds(10) jika ingin test cepat, atau addHours(12) untuk production
+            $expiredTime = $order->created_at->addHours(12); 
+
+            if (now() > $expiredTime) {
+                $order->update([
+                    'payment_status' => '3',       
+                    'order_status'   => 'cancelled'
+                ]);
+                $order->refresh();
+            }
+        }
         
         return view('payment', compact('order'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiClient;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Http;

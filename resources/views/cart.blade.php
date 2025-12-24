@@ -102,7 +102,7 @@
 
                     @forelse($cartItems as $item)
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition hover:shadow-md cart-item-row"
-                            data-id="{{ $item->id }}" data-price="{{ $item->product->harga }}">
+                            data-id="{{ $item->id }}" data-price="{{ $item->final_price }}">
 
                             <div class="flex gap-4 sm:gap-6">
                                 <div class="flex flex-col justify-center">
@@ -134,8 +134,13 @@
                                                     @if($item->warna)
                                                         <p><span class="font-semibold">Warna:</span> {{ $item->warna }}</p>
                                                     @endif
-                                                    @if($item->custom_file && $item->custom_file !== 'Standard')
-                                                        <p><span class="font-semibold">Desain:</span> Custom (<a href="{{ asset('storage/' . $item->custom_file) }}" target="_blank" class="text-brand-blue hover:underline">Lihat File</a>)</p>
+                                                    @if(!empty($item->custom_file) && strtolower($item->custom_file) !== 'standard')
+                                                        <div class="flex items-center gap-2 mt-1">
+                                                            <p><span class="font-semibold">Desain:</span> Custom</p>
+                                                            <span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded border border-yellow-200">
+                                                                + Rp 5.000
+                                                            </span>
+                                                        </div>                                                       
                                                     @else
                                                         <p><span class="font-semibold">Desain:</span> Standard</p>
                                                     @endif
@@ -158,7 +163,7 @@
 
                                     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-4">
                                         <div class="text-lg font-bold text-brand-blue">
-                                            Rp {{ number_format($item->product->harga, 0, ',', '.') }}
+                                            Rp {{ number_format($item->final_price, 0, ',', '.') }}
                                         </div>
 
                                         <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
@@ -209,10 +214,6 @@
                                     <span id="summary-subtotal">Rp 0</span>
                                 </div>
                                 <div class="flex justify-between text-gray-600">
-                                    <span>Diskon Projek</span>
-                                    <span class="text-green-600">- Rp 0</span>
-                                </div>
-                                <div class="flex justify-between text-gray-600">
                                     <span>Pajak (PPN 11%)</span>
                                     <span id="summary-tax">Rp 0</span>
                                 </div>
@@ -235,8 +236,8 @@
                             </form>
 
                             <div class="mt-4 flex items-center justify-center gap-2 text-gray-400 text-xs">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                <span>Transaksi Aman & Terenkripsi</span>
+                                <i class="fa-solid fa-warning"></i>
+                                <span>Harga Belum Termasuk Ongkir</span>
                             </div>
                         </div>
                     </div>

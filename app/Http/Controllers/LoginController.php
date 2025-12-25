@@ -54,9 +54,7 @@ class LoginController extends Controller
         // Simpan ke session
         Session::put('jwt_token', $token);
         Session::put('user_role', $decoded->role);
-        Session::put('jwt_token', $token);
         Session::put('user_id', $decoded->id);
-        Session::put('user_role', $decoded->role);
         Session::put('user_name', $decoded->name ?? $decoded->email);
         Session::put('user_email', $decoded->email);
 
@@ -71,6 +69,7 @@ class LoginController extends Controller
             'user_role',
             'user_name',
             'user_email',
+            'user_id'
         ]);
 
         $request->session()->invalidate();

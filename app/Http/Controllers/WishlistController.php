@@ -10,12 +10,13 @@ class WishlistController extends Controller
     // Fungsi untuk Toggle (Add/Remove via AJAX)
     public function toggle(Request $request)
     {
+        $userId = session('user_id');
+
         // Pastikan user login
-        if (!Auth::check()) {
+        if (!$userId) {
             return response()->json(['status' => 'error', 'message' => 'Silakan login terlebih dahulu.'], 401);
         }
 
-        $userId = Auth::id();
         $productId = $request->product_id;
 
         // Cek apakah sudah ada di wishlist

@@ -95,7 +95,7 @@ class CartController extends Controller
             $existingCart->increment('quantity', $qty);
         } else {
             Cart::create([
-                'user_id'     => session('user_id'),
+                'user_id'     => $userId,
                 'product_id'  => $productId,
                 'quantity'    => $qty,
                 'material'    => $material,   

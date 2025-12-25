@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Subtotal dan biaya tambahan desain custom
     const subtotalText = document.getElementById("subtotalText");
-    const customFeeInfo = document.getElementById("customFeeInfo");
     const designTypeRadios = document.querySelectorAll(
         'input[name="design_type"]'
     );

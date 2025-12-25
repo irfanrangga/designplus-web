@@ -26,7 +26,12 @@ class CheckoutController extends Controller
      */
     public function process(Request $request)
     {
-        $user = session('user_id');
+        $userId = session('user_id');
+        if(!$userId){
+            return redirect()
+                ->route('login')
+                ->withErrors(['auth' => 'Silahkan login terlebih dahulu']);
+        }
         // Support dua mode checkout:
         // - Dari keranjang: tanpa product_id -> ambil item yang is_selected di cart
         // - Direct purchase: ada product_id dari product-detail form
@@ -42,14 +47,14 @@ class CheckoutController extends Controller
             $designType = $request->input('design_type', 'standard');
 
             $product = \App\Models\Product::find($productId);
-            if (! $product) {
+            if (!$product) {
                 return redirect()->back()->with('error', 'Produk tidak ditemukan.');
             }
 
             $customFilePath = null;
             if ($designType === 'custom' && $request->hasFile('custom_file')) {
                 $file = $request->file('custom_file');
-                $customFilePath = $file->store('uploads/custom_designs', 'public');
+                $customFilePath = $file->store('storage/custom_uploads', 'public');
             }
 
             $cartItems->push((object) [
@@ -119,15 +124,16 @@ class CheckoutController extends Controller
         // Hitung Grand Total
         $tax = $subtotal * 0.11;
         $grandTotal = $subtotal + $tax + $shippingCost;
+        $userId = session('user_id');
 
         DB::beginTransaction();
 
         try {
             // A. Buat Order Header
-            $orderNumber = 'INV-' . date('YmdHis') . '-' . session('user_id');
+            $orderNumber = 'INV-' . date('YmdHis') . '-' . $userId;
             
             $order = Order::create([
-                'user_id'        => session('user_id'),
+                'user_id'        => $userId,
                 'number'         => $orderNumber,
                 'total_price'    => $grandTotal,
                 'payment_status' => '1', // Unpaid
@@ -153,7 +159,7 @@ class CheckoutController extends Controller
                 }
 
                 // Generate Note Otomatis
-                $noteParts = [];              
+                $noteParts = [];
                 if (!empty($cart->note)) $noteParts[] = $cart->note;
                 $note = count($noteParts) ? implode("\n", $noteParts) : null;
 
@@ -176,7 +182,7 @@ class CheckoutController extends Controller
             $create_invoice_request = new \Xendit\Invoice\CreateInvoiceRequest([
                 'external_id' => $orderNumber,
                 'amount' => $grandTotal,
-                'payer_email' => $user->email,
+                'payer_email' => session('user_email'),
                 'description' => 'Pembayaran Order ' . $orderNumber,
                 'invoice_duration' => 43200, // 12 Jam
                 'success_redirect_url' => route('home'),
@@ -213,7 +219,7 @@ class CheckoutController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with('items')->where('user_id', Auth::id())->findOrFail($id);
+        $order = Order::with('items')->where('user_id', session('user_id'))->findOrFail($id);
 
         // Auto-Expire saat halaman dibuka
         if ($order->payment_status == '1') {

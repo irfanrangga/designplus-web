@@ -80,33 +80,38 @@
                 @forelse($products as $product)
                     <div class="group relative bg-white border rounded-xl overflow-hidden">
 
-                        <a href="{{ url('/product/' . $product['id']) }}" class="absolute inset-0 z-10"></a>
+                        {{-- PERBAIKAN 1: Ganti ['id'] jadi ->id --}}
+                        <a href="{{ url('/product/' . $product->id) }}" class="absolute inset-0 z-10"></a>
 
-                        <button type="button" onclick="toggleWishlist(this, {{ $product['id'] }}, event)"
+                        {{-- PERBAIKAN 2: Ganti ['id'] jadi ->id --}}
+                        <button type="button" onclick="toggleWishlist(this, {{ $product->id }}, event)"
                             class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/90 shadow-sm transition-transform active:scale-95 flex items-center justify-center cursor-pointer hover:bg-gray-50 group-hover/btn:ring-2 group-hover/btn:ring-pink-500">
-
                             <i class="fa-regular fa-heart text-gray-400 text-lg transition-colors duration-200"></i>
                         </button>
 
                         <div class="h-[220px] overflow-hidden bg-gray-50 border-b border-gray-100 relative z-0">
-                            <img src="{{ asset($product['file']) }}" alt="{{ $product['nama'] }}"
+                            {{-- PERBAIKAN 3: Ganti ['file'] dan ['nama'] jadi ->file dan ->nama --}}
+                            <img src="{{ asset($product->file) }}" alt="{{ $product->nama }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out">
                         </div>
 
                         <div class="p-5 flex flex-col flex-grow relative z-10">
                             <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                                {{ $product['kategori'] }}
+                                {{-- PERBAIKAN 4: Ganti ['kategori'] jadi ->kategori --}}
+                                {{ $product->kategori }}
                             </span>
 
                             <h3
                                 class="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-brand-blue transition line-clamp-2">
-                                {{ $product['nama'] }}
+                                {{-- PERBAIKAN 5: Ganti ['nama'] jadi ->nama --}}
+                                {{ $product->nama }}
                             </h3>
 
                             <div class="flex items-center gap-1 mb-4">
                                 <div class="flex text-yellow-400 text-xs">
                                     @php
-                                        $rating = $product['rating'];
+                                        // PERBAIKAN 6: Ganti ['rating'] jadi ->rating
+                                        $rating = $product->rating;
                                         $full = floor($rating);
                                         $half = ($rating - $full) >= 0.5;
                                     @endphp
@@ -121,12 +126,14 @@
                                 class="mt-auto pt-3 border-t border-dashed border-gray-200 flex justify-between items-center">
 
                                 <span class="text-lg font-bold text-gray-900">
-                                    Rp {{ number_format($product['harga'], 0, ',', '.') }}
+                                    {{-- PERBAIKAN 7: Ganti ['harga'] jadi ->harga --}}
+                                    Rp {{ number_format($product->harga, 0, ',', '.') }}
                                 </span>
 
                                 <form action="{{ route('cart.store') }}" method="POST" onsubmit="event.stopPropagation()">
                                     @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                                    {{-- PERBAIKAN 8: Ganti ['id'] jadi ->id --}}
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="quantity" value="1">
                                 </form>
 
@@ -134,6 +141,7 @@
                         </div>
                     </div>
                 @empty
+                    {{-- Bagian kosong tetap sama --}}
                     <div
                         class="col-span-full py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
                         <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-4"></i>
@@ -216,7 +224,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": token 
+                    "X-CSRF-TOKEN": token
                 },
                 body: JSON.stringify({ product_id: productId })
             })
@@ -229,12 +237,12 @@
                         }
                         alert("Silakan login terlebih dahulu!");
                         window.location.href = "/login";
-                        return null; 
+                        return null;
                     }
                     return response.json();
                 })
                 .then(data => {
-                    if (!data) return; 
+                    if (!data) return;
 
                     // sinkronisasi status akhir dari server (Penting!)
                     if (data.status === 'added') {

@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.auth' => EnsureApiAuthenticated::class,
             'role' => RoleMiddleware::class,
-            'jwt_secret' => env('JWT_SECRET')
+            'jwt_secret' => env('JWT_SECRET')]);
         $middleware->validateCsrfTokens(except: [
             'webhook/xendit', // Kecualikan route ini dari proteksi CSRF
         ]);

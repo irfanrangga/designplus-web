@@ -12,7 +12,7 @@ class EnsureApiAuthenticated
     public function handle($request, Closure $next)
     {
         if(!Session::has('jwt_token')) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
         
         return $next($request);

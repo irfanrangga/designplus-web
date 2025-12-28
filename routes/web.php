@@ -30,13 +30,10 @@ Route::get('/product-detail', function () {
     return view('product-detail');
 })->name('product-detail');
 
-<<<<<<< HEAD
-=======
 Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
 
->>>>>>> 9af4464b49491cb6de45a01fa7cd3ea9461b25cc
 // PRODUCT (Etalase & Detail)
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
@@ -87,9 +84,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 });
-<<<<<<< HEAD
-=======
 
 Route::get('/payment', [PaymentController::class, 'index']);
 Route::post('/invoice-process', [InvoiceController::class, 'process'])->name('invoice.process');
->>>>>>> 9af4464b49491cb6de45a01fa7cd3ea9461b25cc

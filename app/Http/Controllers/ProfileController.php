@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiClient;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -50,8 +51,7 @@ class ProfileController extends Controller
         }
         $userId = session('user_id');
         // 3. Kirim ke API
-        $response = Http::withToken(session('jwt_token'))
-            ->put(env('API_BASE_URL') . '/users/' . $userId, $validated);
+        $response = ApiClient::put('/users/' . $userId, $validated);
 
         if ($response->failed()) {
             return back()->withErrors([
@@ -98,9 +98,9 @@ class ProfileController extends Controller
         return redirect()->route('login')
             ->withErrors(['auth' => 'Sesi Anda telah berakhir. Silakan login kembali.']);
         }
-        $userId = session('user_id');
-        $response = Http::withToken(session('jwt_token'))
-                ->put(env('API_BASE_URL') . '/users/password/' . $userId, $validated);
+
+        $response = ApiClient::put('/users/password/me', $validated);
+
         // 3. Hash dan simpan password baru
         if ($response->failed()) {
             return back()->withErrors([

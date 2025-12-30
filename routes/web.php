@@ -10,8 +10,6 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WebhookController;
 
-
-
 // HOME
 Route::get('/', function () {
     return view('homepage');
@@ -21,10 +19,6 @@ Route::get('/', function () {
 Route::get('/layanan', function () {
     return view('layanan');
 })->name('layanan');
-
-// PRODUCT (Etalase & Detail)
-Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 // Register
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
@@ -38,16 +32,18 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware(['api.auth'])->group(function () {
-
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // DASHBOARD/PENGATURAN AKUN (Profile)
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
-    // Rute untuk pembaruan data
-    Route::put('/profile/update-info', [ProfileController::class, 'updateUserInfo'])->name('profile.update-info');
+    // PRODUCT (Etalase & Detail)
+    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
+    // PEMBARUAN DATA PENGGUNA (Update Info & Password)
+    Route::put('/profile/update-info', [ProfileController::class, 'updateUserInfo'])->name('profile.update-info');
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart');

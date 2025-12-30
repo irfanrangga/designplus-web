@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use function Symfony\Component\Clock\now;
 
-// use Illuminate\Support\Facades\Auth; // Tidak dipakai karena kita redirect ke login
-
 class RegisterController extends Controller
 {
     public function index()
@@ -20,18 +18,18 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-        // 1. VALIDASI DATA (TETAP DIPAKAI)
+        // 1. VALIDASI DATA
         $validatedData = $request->validate([
             'name' => 'required|min:3|max:255',
             'email' => 'required|email:dns',
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // 2. KIRIM KE API (TANPA HASH!)
+        // 2. KIRIM KE API
         $response = Http::post(env('API_BASE_URL') . '/register', [
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => $validatedData['password'], // PLAIN TEXT
+            'password' => $validatedData['password'],
         ]);
 
         // 3. JIKA GAGAL

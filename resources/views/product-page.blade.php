@@ -84,7 +84,6 @@
 
                         <button type="button" onclick="toggleWishlist(this, {{ $product->id }}, event)"
                             class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/90 shadow-sm transition-transform active:scale-95 flex items-center justify-center cursor-pointer hover:bg-gray-50 group-hover/btn:ring-2 group-hover/btn:ring-pink-500">
-
                             <i class="fa-regular fa-heart text-gray-400 text-lg transition-colors duration-200"></i>
                         </button>
 
@@ -128,12 +127,6 @@
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="quantity" value="1">
-
-                                    <button type="submit"
-                                        class="w-10 h-10 rounded-full bg-brand-light text-brand-blue border border-transparent hover:bg-brand-blue hover:text-white hover:shadow-md hover:border-brand-blue flex items-center justify-center transition-all duration-200"
-                                        title="Tambah ke Keranjang">
-                                        <i class="fa-solid fa-cart-plus text-sm"></i>
-                                    </button>
                                 </form>
 
                             </div>
@@ -222,7 +215,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": token 
+                    "X-CSRF-TOKEN": token
                 },
                 body: JSON.stringify({ product_id: productId })
             })
@@ -235,12 +228,12 @@
                         }
                         alert("Silakan login terlebih dahulu!");
                         window.location.href = "/login";
-                        return null; 
+                        return null;
                     }
                     return response.json();
                 })
                 .then(data => {
-                    if (!data) return; 
+                    if (!data) return;
 
                     // sinkronisasi status akhir dari server (Penting!)
                     if (data.status === 'added') {

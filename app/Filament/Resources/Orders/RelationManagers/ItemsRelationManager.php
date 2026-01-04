@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Orders\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Filament\Actions\CreateAction;
 use Filament\Schemas\Components\Form;
 use Filament\Tables\Columns\TextColumn;
@@ -27,24 +28,28 @@ class ItemsRelationManager extends RelationManager
                     ->label('Nama Produk')
                     ->searchable()
                     ->weight('bold')
-                    ->description(fn ($record) => $record->note), // Menampilkan 'note' di bawah nama produk
+                    ->description(fn ($record) => $record->note),
 
                 // 2. Detail Varian (Bahan & Warna)
                 TextColumn::make('bahan')
                     ->label('Bahan')
-                    ->toggleable(), // Bisa disembunyikan user jika mau
+                    ->toggleable(),
                 
                 TextColumn::make('warna')
                     ->label('Warna')
-                    ->badge() // Tampil seperti badge/label kecil agar rapi
+                    ->badge()
                     ->color('info'),
 
                 // 3. File Custom (Menampilkan Gambar atau Link)
                 ImageColumn::make('custom_file')
                     ->label('File Custom')
-                    ->disk('custom_uploads')
+                    ->disk('public')
                     ->visibility('public')
                     ->square()
+                    ->toggleable()
+                    ->state(function ($record) {
+                        return Str::replace('custom_uploads/', '', $record->custom_file);
+                    })
                     ->defaultImageUrl(url('/images/placeholder.png')), // Gambar default jika null
 
                 // 4. Harga Satuan
@@ -65,19 +70,6 @@ class ItemsRelationManager extends RelationManager
             ])
             ->filters([
                 //
-            ])
-            ->headerActions([
-                // Biasanya order item tidak ditambah manual via admin, jadi create action bisa dihapus
-                // Tables\Actions\CreateAction::make(),
-            ])
-            ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
             ]);
     }
 }

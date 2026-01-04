@@ -44,6 +44,7 @@
 <body class="text-gray-800 font-sans antialiased">
 
     <x-navbar></x-navbar>
+    <x-chatbox></x-chatbox>
     @php
     $currentPage = request('page', 'user-info');
     $isActive = fn($page) => $currentPage === $page ? 'bg-brand-light text-brand-blue font-semibold' : 'text-gray-600 hover:bg-gray-50';
@@ -343,6 +344,7 @@
 
                                     {{-- Tombol Aksi --}}
                                     <div>
+                                        
                                         @if($order->payment_status == '1')
                                             <a href="{{ route('payment.show', $order->id) }}" 
                                                class="inline-block px-4 py-2 bg-brand-blue text-white text-sm font-bold rounded-lg hover:bg-brand-dark transition shadow-sm shadow-blue-300">

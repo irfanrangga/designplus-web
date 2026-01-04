@@ -15,7 +15,7 @@ class OrderInfolist
                     ->numeric(),
                 TextEntry::make('number'),
                 TextEntry::make('total_price')
-                    ->money(),
+                    ->money('idr', locale:'id'),
                 TextEntry::make('payment_status')
                     ->badge(),
                 TextEntry::make('order_status')

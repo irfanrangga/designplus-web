@@ -58,6 +58,7 @@
 <body class="bg-white text-gray-800 font-sans antialiased">
 
     <x-navbar></x-navbar>
+    <x-chatbox></x-chatbox>
     <main>
 
         <section class="w-full px-6 md:px-12 lg:px-16 pt-24 pb-16">

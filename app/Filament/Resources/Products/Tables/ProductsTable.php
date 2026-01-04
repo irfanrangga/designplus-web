@@ -19,7 +19,7 @@ class ProductsTable
                 TextColumn::make('nama')
                     ->searchable(),
                 TextColumn::make('harga')
-                    ->money('idr')
+                    ->money('idr', locale:'id')
                     ->sortable(),
                 TextColumn::make('kategori')
                     ->searchable(),

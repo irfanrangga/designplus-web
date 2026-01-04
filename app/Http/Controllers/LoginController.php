@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class LoginController extends Controller
 {
@@ -45,11 +46,20 @@ class LoginController extends Controller
                 ]);
         }
 
-        // Decode JWT untuk ambil role
         $decoded = JWT::decode(
             $token, 
             new Key(env('JWT_SECRET'), 'HS256')
         );
+
+        $user = User::updateOrCreate(
+            ['email' => $decoded->email],
+            [
+                'name' => $decoded->name ?? $decoded->email,
+                'role' => $decoded->role
+            ]
+        );
+
+        Auth::login($user);
 
         // Simpan ke session
         Session::put('jwt_token', $token);
@@ -75,6 +85,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success', 'Anda berhasil keluar.');
+        return redirect()->route('login')->with('success', 'Anda berhasil keluar.');
     }
 }

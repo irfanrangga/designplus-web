@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -19,7 +20,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $response = Http::get($this->apiURL . '/' . $id);
+        $response = ApiClient::get('/products/' . $id);
 
         if ($response->failed() || $response->status() == 404) {
             abort(404);

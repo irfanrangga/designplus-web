@@ -14,7 +14,7 @@ class Order extends Model
     //Order punya banyak item
     public function items()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
     //Order milik satu user

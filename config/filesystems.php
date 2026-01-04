@@ -38,6 +38,13 @@ return [
             'report' => false,
         ],
 
+        'custom_uploads' => [
+            'driver' => 'local',
+            'root' => storage_path('custom_uploads'), // Menunjuk ke folder storage/custom_uploads
+            'url' => env('APP_URL') . '/uploads', // URL akses di browser (misal: domain.com/uploads/file.jpg)
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -75,6 +82,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('uploads') => storage_path('custom_uploads'),
     ],
 
 ];

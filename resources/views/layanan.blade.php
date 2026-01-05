@@ -21,7 +21,7 @@
                             dark: '#0A43C3',
                             light: '#EEF2FF',
                             gray: '#f8f9fa',
-                            green: '#25D366', // Warna WhatsApp
+                            green: '#25D366', 
                             greenDark: '#128C7E'
                         }
                     },
@@ -58,7 +58,7 @@
                     Tim Customer Service kami siap membantu Anda dengan cepat.
                 </p>
 
-                <a href="https://wa.me/6281329176328?text=Halo%20Admin%20DesignPlus,%20saya%20butuh%20bantuan%20mengenai..."
+                <a href="https://wa.me/6281292839906?text=Halo%20Admin%20DesignPlus,%20saya%20butuh%20bantuan%20"
                     target="_blank"
                     class="inline-flex items-center gap-3 bg-brand-green hover:bg-brand-greenDark text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                     <i class="fa-brands fa-whatsapp text-2xl group-hover:scale-110 transition-transform"></i>
@@ -97,9 +97,9 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-900 mb-1">WhatsApp & Telepon</h4>
-                                    <a href="https://wa.me/6281234567899"
+                                    <a href="https://wa.me/6281292839906"
                                         class="text-gray-600 hover:text-brand-green transition block">
-                                        +62 812-3456-7899 (Chat Only)
+                                        +62 812-9283-9906 (Chat Only)
                                     </a>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
             </div>
         </section>
 
-        <a href="https://wa.me/6281329176328" target="_blank"
+        <a href="https://wa.me/6281292839906" target="_blank"
             class="fixed bottom-6 right-6 z-50 bg-brand-green text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-brand-greenDark hover:scale-110 transition-all duration-300 animate-bounce-slow"
             title="Chat WhatsApp">
             <i class="fa-brands fa-whatsapp text-3xl"></i>
@@ -294,19 +294,8 @@
         function toggleFaq(button) {
             const content = button.nextElementSibling;
             const icon = button.querySelector('i');
-
-            // Tutup item lain yang sedang terbuka (Optional - agar rapi)
-            // document.querySelectorAll('.bg-gray-50.p-4').forEach(el => {
-            //    if (el !== content) el.classList.add('hidden');
-            // });
-            // document.querySelectorAll('.fa-chevron-down').forEach(el => {
-            //    if (el !== icon) el.style.transform = 'rotate(0deg)';
-            // });
-
-            // Toggle state item yang diklik
             content.classList.toggle('hidden');
 
-            // Putar Icon
             if (content.classList.contains('hidden')) {
                 icon.style.transform = 'rotate(0deg)';
             } else {

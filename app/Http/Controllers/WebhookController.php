@@ -25,7 +25,7 @@ class WebhookController extends Controller
         }
 
         // Cari Order berdasarkan Number
-        $order = Order::where('number', $externalId)->first();
+        $order = Order::with('items.product')->where('number', $externalId)->first();
 
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -43,12 +43,27 @@ class WebhookController extends Controller
                     'payment_status' => '2',       // 2 = Paid
                     'order_status'   => 'processing' // Masuk tahap pengerjaan
                 ]);
+
+                // Logika penambahan 'Terjual' di Produk
+                foreach ($order->items as $item) {
+                    if ($item->product) {
+                        // Tambahkan counter terjual sesuai jumlah yang dibeli
+                        $item->product->increment('terjual', $item->quantity);
+                    }
+                };
             } elseif ($status === 'EXPIRED') {
                 // Jika waktu habis (12 jam lewat)
                 $order->update([
                     'payment_status' => '3',       // 3 = Expired
                     'order_status'   => 'cancelled' // Order dibatalkan
                 ]);
+
+                foreach ($order->items as $item) {
+                    if ($item->product) {
+                        // Kembalikan stok yang sebelumnya dipotong
+                        $item->product->increment('stok', $item->quantity);
+                    }
+                }
             }
 
             DB::commit();

@@ -47,9 +47,9 @@ class ItemsRelationManager extends RelationManager
                     ->visibility('public')
                     ->square()
                     ->toggleable()
-                    ->state(function ($record) {
-                        return Str::replace('custom_uploads/', '', $record->custom_file);
-                    })
+                    // ->state(function ($record) {
+                    //     return Str::replace('custom_uploads/', '', $record->custom_file);
+                    // })
                     ->defaultImageUrl(url('/images/placeholder.png')), // Gambar default jika null
 
                 // 4. Harga Satuan

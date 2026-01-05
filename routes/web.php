@@ -30,6 +30,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
 });
 
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
 Route::middleware(['api.auth'])->group(function () {
     // LOGOUT
@@ -39,7 +40,6 @@ Route::middleware(['api.auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
     // PRODUCT (Etalase & Detail)
-    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
     Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
     // PEMBARUAN DATA PENGGUNA (Update Info & Password)

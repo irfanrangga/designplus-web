@@ -323,7 +323,7 @@
                                     <div>
                                         <div class="flex items-center gap-3 mb-1">
                                             <span class="font-mono text-sm font-bold text-gray-500">#{{ $order->number }}</span>
-                                            <span class="text-xs text-gray-400">• {{ $order->created_at->format('d M Y, H:i') }}</span>
+                                            <span class="text-xs text-gray-400">• {{ $order->created_at?->format('d M Y, H:i') }}</span>
                                         </div>
                                         
                                         {{-- Logic Status Badge --}}

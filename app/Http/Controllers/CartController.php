@@ -23,7 +23,6 @@ class CartController extends Controller
         foreach ($cartItems as $item) {
             if ($item->product) {
                 // 1. Cek apakah ini Custom?
-                // Logic: Jika ada file (selain 'Standard') ATAU jika design_type di database tercatat custom
                 $isCustom = (!empty($item->custom_file) && strtolower($item->custom_file) !== 'standard');
                 
                 // 2. Tentukan Harga Satuan
@@ -34,7 +33,6 @@ class CartController extends Controller
                 $item->final_price = $finalPrice;
 
                 // 4. Tambahkan ke Subtotal Global jika item dipilih
-                // (Asumsi semua dihitung, atau sesuaikan jika ada logika checkbox is_selected)
                 if ($item->is_selected ?? true) {
                     $subtotal += $finalPrice * $item->quantity;
                 }

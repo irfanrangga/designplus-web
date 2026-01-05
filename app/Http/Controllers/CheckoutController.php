@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use Exception;
 use Xendit\Configuration;
 use Xendit\Invoice\InvoiceApi;
 use Illuminate\Support\Str;
@@ -145,7 +147,16 @@ class CheckoutController extends Controller
             // B. Simpan Item (Order Items)
             foreach ($cartItems as $cart) {
                 $productId = $cart->product_id ?? $cart->product->id;
-                $product = $cart->product;
+                $product = Product::lockForUpdate()->find($productId);
+                if(!$product)
+                {
+                    throw new Exception("Produk tidak ditemukan");
+                }
+
+                if($product->stok < $cart->quantity) {
+                    throw new Exception("Stok Barang '{$product->nama}' tidak mencukupi");
+                }
+                $product->decrement('stok', $cart->quantity);
 
                 $savedPrice = $cart->final_price; 
                 $customFile = $cart->custom_file ?? null;

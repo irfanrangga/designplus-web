@@ -1,5 +1,3 @@
-@props([])
-
 @php
     $jwtToken = session('jwt_token');
 @endphp
@@ -59,7 +57,7 @@
         (function() {
             const config = {
                 token: "{{ $jwtToken }}",
-                apiBaseUrl: "http://localhost:3000/v1/api" // Sesuaikan Port Node.js
+                apiBaseUrl: "http://localhost:3000/v1/api"
             };
 
             const els = {

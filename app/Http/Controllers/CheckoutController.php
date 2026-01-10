@@ -69,9 +69,7 @@ class CheckoutController extends Controller
             }
         }
 
-        // ============================================================
         // 2. HITUNG TOTAL & HARGA SATUAN (Termasuk Biaya Custom)
-        // ============================================================
         $subtotal = 0;
         
         foreach ($cartItems as $item) {
@@ -84,7 +82,7 @@ class CheckoutController extends Controller
             // Jika Custom, tambah Rp 5.000
             $finalUnitPrice = $isCustom ? ($basePrice + 5000) : $basePrice;
             
-            // SIMPAN harga final ini ke object item agar bisa dipakai saat create OrderItem nanti
+            // SIMPAN harga final ini ke object item untuk dipakai saat create OrderItem
             $item->final_price = $finalUnitPrice;
             
             $qty = $item->quantity;

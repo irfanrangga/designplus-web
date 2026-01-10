@@ -35,7 +35,7 @@
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fa-solid fa-phone text-brand-blue shrink-0"></i>
-                        <span>+6281329176328</span>
+                        <span>+6281292839906</span>
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fa-solid fa-envelope text-brand-blue shrink-0"></i>

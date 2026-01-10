@@ -11,7 +11,7 @@ class Wishlist extends Model
 
     protected $guarded = ['id'];
 
-    // Relasi ke Produk untuk mengambil nama, harga, gambar
+    // relasi ke produk untuk mengambil nama, harga, gambar
     public function product()
     {
         return $this->belongsTo(Product::class);

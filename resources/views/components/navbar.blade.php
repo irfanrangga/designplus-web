@@ -34,12 +34,12 @@
                     <i class="fa-solid fa-cart-shopping"></i>
                 </a>
 
-                @auth
+                @if(session()->has('jwt_token'))
                     <div class="group relative">
                         <a href="{{ route('profile') }}"
                             class="flex items-center gap-2 text-gray-700 hover:text-brand-blue transition">
                             <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
-                            <span class="font-medium text-[15px]">{{ Auth::user()->name }}</span>
+                            <span class="font-medium text-[15px]">{{ session('user_name') }}</span>
                             <i class="fa-solid fa-caret-down text-xs ml-1"></i>
                         </a>
 
@@ -50,7 +50,7 @@
                                 class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition">
                                 <i class="fa-solid fa-gear"></i> Profile
                             </a>
-                            @if (Auth::user()->name === 'Admin')
+                            @if (session('user_name') === 'Admin')
                                 <a href="{{ route('dashboard') }}"
                                     class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md transition">
                                     <i class="fa-solid fa-gauge"></i>Dashboard
@@ -72,8 +72,7 @@
                         <i class="fa-regular fa-user text-xl group-hover:text-brand-blue"></i>
                         <span class="font-medium text-[15px]">Masuk/Daftar</span>
                     </a>
-                @endauth
-
+                @endif
             </div>
         </div>
 
@@ -99,10 +98,10 @@
 
         <hr class="border-gray-100">
 
-        @auth
+        @if (session()->has('jwt_token'))
             <div class="py-2 flex flex-col">
                 <span class="text-gray-600 text-sm">Selamat datang,</span>
-                <span class="font-semibold text-lg text-gray-900 mb-2">{{ Auth::user()->name }}</span>
+                <span class="font-semibold text-lg text-gray-900 mb-2">{{ session('user_name') }}</span>
 
                 <a href="{{ route('profile') }}"
                     class="text-sm font-medium text-brand-blue hover:text-brand-dark flex items-center gap-2">
@@ -124,7 +123,7 @@
                     Masuk / Daftar
                 </a>
             </div>
-        @endauth
+        @endif
     </div>
 </nav>
 

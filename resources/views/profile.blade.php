@@ -44,6 +44,7 @@
 <body class="text-gray-800 font-sans antialiased">
 
     <x-navbar></x-navbar>
+    <x-chatbox></x-chatbox>
     @php
     $currentPage = request('page', 'user-info');
     $isActive = fn($page) => $currentPage === $page ? 'bg-brand-light text-brand-blue font-semibold' : 'text-gray-600 hover:bg-gray-50';
@@ -128,10 +129,10 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Informasi Akun</h2>
 
                     <div class="flex items-center gap-6 mb-8">
-                        <img src="{{ asset('assets/icon/user.png') }}" alt="{{ Auth::user()->name }}" class="w-20 h-20 rounded-full object-cover border border-gray-100">
+                        <img src="{{ asset('assets/icon/user.png') }}" alt="{{ session('user_name') }}" class="w-20 h-20 rounded-full object-cover border border-gray-100">
                         <div>
-                            <span class="text-2xl font-semibold text-gray-900">{{ Auth::user()->name }}</span>
-                            <p class="text-gray-500 text-sm">{{ Auth::user()->location ?? 'Lokasi Belum Diatur' }}</p>
+                            <span class="text-2xl font-semibold text-gray-900">{{ session('user_name') }}</span>
+                            <p class="text-gray-500 text-sm">{{ session('user_location') ?? 'Lokasi Belum Diatur' }}</p>
                         </div>
                     </div>
 
@@ -142,36 +143,36 @@
 
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Depan</label>
-                            <input type="text" id="name" name="name" value="{{ old('name', Auth::user()->name) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('name') border-red-500 @enderror">
+                            <input type="text" id="name" name="name" value="{{ old('user_name', session('user_name')) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('name') border-red-500 @enderror">
                             @error('name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div>
                             <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">Nama Belakang</label>
-                            <input type="text" id="full_name" name="full_name" value="{{ old('full_name', Auth::user()->full_name ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('full_name') border-red-500 @enderror">
+                            <input type="text" id="full_name" name="full_name" value="{{ old('full_name', session('user_full_name') ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('full_name') border-red-500 @enderror">
                             @error('full_name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                            <input type="email" id="email" value="{{ Auth::user()->email }}" disabled class="w-full border-gray-200 bg-gray-50 rounded-lg p-2.5 cursor-not-allowed">
+                            <input type="email" id="email" value="{{ session('user_email') }}" disabled class="w-full border-gray-200 bg-gray-50 rounded-lg p-2.5 cursor-not-allowed">
                         </div>
 
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="text" id="phone" name="phone" value="{{ old('phone', Auth::user()->phone ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('phone') border-red-500 @enderror">
+                            <input type="text" id="phone" name="phone" value="{{ old('phone', session('user_phone') ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('phone') border-red-500 @enderror">
                             @error('phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div class="md:col-span-1">
                             <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
-                            <input type="text" id="location" name="location" value="{{ old('location', Auth::user()->location ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('location') border-red-500 @enderror">
+                            <input type="text" id="location" name="location" value="{{ old('location', session('user_location') ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('location') border-red-500 @enderror">
                             @error('location')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div class="md:col-span-1">
                             <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
-                            <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code', Auth::user()->postal_code ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('postal_code') border-red-500 @enderror">
+                            <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code', session('user_postal_code') ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20 p-2.5 @error('postal_code') border-red-500 @enderror">
                             @error('postal_code')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
@@ -322,7 +323,7 @@
                                     <div>
                                         <div class="flex items-center gap-3 mb-1">
                                             <span class="font-mono text-sm font-bold text-gray-500">#{{ $order->number }}</span>
-                                            <span class="text-xs text-gray-400">• {{ $order->created_at->format('d M Y, H:i') }}</span>
+                                            <span class="text-xs text-gray-400">• {{ $order->created_at?->format('d M Y, H:i') }}</span>
                                         </div>
                                         
                                         {{-- Logic Status Badge --}}
@@ -343,6 +344,7 @@
 
                                     {{-- Tombol Aksi --}}
                                     <div>
+                                        
                                         @if($order->payment_status == '1')
                                             <a href="{{ route('payment.show', $order->id) }}" 
                                                class="inline-block px-4 py-2 bg-brand-blue text-white text-sm font-bold rounded-lg hover:bg-brand-dark transition shadow-sm shadow-blue-300">

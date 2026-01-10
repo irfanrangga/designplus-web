@@ -2,19 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiClient;
 use Illuminate\Http\Request;
-use App\Models\Product; 
+use Illuminate\Support\Facades\Http;
+
 class ProductController extends Controller
 {
+    private $apiURL = 'http://localhost:3000/v1/api/products';
+
     public function index()
     {
-        $products = Product::latest()->paginate(12);
+        $response = Http::get($this->apiURL);
+        $products = $response->object() ?? [];
+
         return view('product-page', compact('products'));
     }
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $response = ApiClient::get('/products/' . $id);
+
+        if ($response->failed() || $response->status() == 404) {
+            abort(404);
+        }
+
+        $product = $response->object();
+
         return view('product-detail', compact('product'));
     }
 }

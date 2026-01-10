@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
-use Filament\Infolists\Components\TextEntry;
+use App\PaymentStatus;
 use Filament\Schemas\Schema;
+use Filament\Infolists\Components\TextEntry;
 
 class OrderInfolist
 {
@@ -11,12 +12,15 @@ class OrderInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('user_id')
-                    ->numeric(),
+                TextEntry::make('user.name')
+                    ->label('Nama Customer')
+                    ->icon('heroicon-o-user'),
                 TextEntry::make('number'),
                 TextEntry::make('total_price')
-                    ->money(),
+                    ->money('idr', locale:'id'),
                 TextEntry::make('payment_status')
+                    ->formatStateUsing( fn ($state) => PaymentStatus::from($state)->label())
+                    ->color(fn ($state) => PaymentStatus::from($state)->color())
                     ->badge(),
                 TextEntry::make('order_status')
                     ->badge(),

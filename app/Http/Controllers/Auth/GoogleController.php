@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;    // <--- PASTIKAN INI ADA
-use Illuminate\Support\Facades\Session; // <--- TAMBAHKAN INI
+use Illuminate\Support\Facades\Auth;    
+use Illuminate\Support\Facades\Session; 
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -26,8 +26,6 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Kirim data Google ke API Node.js Anda
-            // Kita asumsikan ada endpoint khusus di Node.js untuk Google Auth
             $response = ApiClient::post('/auth/google', [
                 'email'     => $googleUser->getEmail(),
                 'name'      => $googleUser->getName(),
@@ -41,7 +39,6 @@ class GoogleController extends Controller
 
             $token = $response->json('token') ?? $response->json('data.token');
 
-            // Decode JWT seperti pada LoginController manual Anda
             $decoded = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
 
             $user = new User([
@@ -51,10 +48,8 @@ class GoogleController extends Controller
                 'role'  => $decoded->role
             ]);
 
-            // Login ke session Laravel
             Auth::login($user);
 
-            // Simpan data ke session agar sinkron dengan LoginController
             Session::put('jwt_token', $token);
             Session::put('user_role', $decoded->role);
             Session::put('user_id', $decoded->id);

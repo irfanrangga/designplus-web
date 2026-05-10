@@ -34,17 +34,15 @@ class GoogleController extends Controller
                     'name'      => $googleUser->getName(),
                     'email'     => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
-                    // Buat password acak yang panjang karena user login via Google
+                    'avatar' => $googleUser->getAvatar(),
                     'password'  => Hash::make(Str::random(24)), 
                     // 'role' => 'user' // Buka komentar ini jika Anda punya kolom role dengan default tertentu
                 ]);
             } else {
-                // (Opsional) Jika user sudah ada tapi google_id-nya masih kosong, kita update
-                if (!$user->google_id) {
-                    $user->update([
-                        'google_id' => $googleUser->getId()
-                    ]);
-                }
+                $user->update([
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                ]);
             }
 
             // Login ke session Laravel

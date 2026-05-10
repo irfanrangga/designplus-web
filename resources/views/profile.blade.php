@@ -129,7 +129,7 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Informasi Akun</h2>
 
                     <div class="flex items-center gap-6 mb-8">
-                        <img src="{{ asset('assets/icon/user.png') }}" alt="{{ Auth::user()->name }}" class="w-20 h-20 rounded-full object-cover border border-gray-100">
+                        <img src="{{ Auth::user()->avatar ?? asset('assets/icon/profile.png') }}" alt="{{ Auth::user()->name }}" class="w-20 h-20 rounded-full object-cover border border-gray-100">
                         <div>
                             <span class="text-2xl font-semibold text-gray-900">{{ Auth::user()->name }}</span>
                             <p class="text-gray-500 text-sm">{{ Auth::user()->location ?? 'Lokasi Belum Diatur' }}</p>

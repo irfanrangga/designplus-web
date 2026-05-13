@@ -1,16 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DesignFileController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\WebhookController;
-use App\Http\Controllers\DesignFileController;
-use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\WishlistController;
+use Illuminate\Support\Facades\Route;
 
 // HOME
 Route::get('/', function () {
@@ -64,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/order/{orderId}/item/{itemId}/download', [DesignFileController::class, 'download'])->name('design.download');
     Route::get('/order/{orderId}/item/{itemId}/view', [DesignFileController::class, 'view'])->name('design.view');
     Route::post('/design/upload', [DesignFileController::class, 'upload'])->name('design.upload');
+
+    Route::get('/chat/messages', [ChatController::class, 'getMessages'])->name('chat.get');
+    Route::post('/chat/send', [ChatController::class, 'storeMessage'])->name('chat.store');
 
     Route::get('/dashboard', function () {
         return redirect(config('filament.path', 'admin'));

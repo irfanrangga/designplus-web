@@ -507,56 +507,7 @@
 
     <x-footer></x-footer>
 
-    {{-- SCRIPT MOBILE NAVBAR --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            menuBtn.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-
-                const icon = menuBtn.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-xmark');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-xmark');
-                }
-            });
-        });
-
-        // Fungsi untuk menampilkan desain di modal (untuk profil)
-        function viewDesignModal(imageUrl) {
-            const modal = document.getElementById('designModalProfile');
-            const modalImage = document.getElementById('modalDesignImageProfile');
-            
-            if (modal) {
-                modalImage.src = imageUrl;
-                modal.classList.remove('hidden');
-            }
-        }
-
-        function closeDesignModalProfile() {
-            const modal = document.getElementById('designModalProfile');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-        }
-
-        // Close modal jika klik di luar area modal
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('designModalProfile');
-            if (modal) {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        closeDesignModalProfile();
-                    }
-                });
-            }
-        });
-    </script>
+    @stack('scripts')
 </body>
 
 </html>

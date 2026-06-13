@@ -60,7 +60,7 @@
 
                 <a href="https://wa.me/6281292839906?text=Halo%20Admin%20DesignPlus,%20saya%20butuh%20bantuan%20"
                     target="_blank"
-                    class="inline-flex items-center gap-3 bg-brand-green hover:bg-brand-greenDark text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    class="inline-flex items-center gap-3 bg-green-500 hover:bg-brand-greenDark text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                     <i class="fa-brands fa-whatsapp text-2xl group-hover:scale-110 transition-transform"></i>
                     <span>Chat Customer Service via WhatsApp</span>
                 </a>
@@ -92,22 +92,8 @@
 
                             <div class="flex items-start gap-4">
                                 <div
-                                    class="w-12 h-12 rounded-lg bg-green-50 text-brand-green flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-900 mb-1">WhatsApp & Telepon</h4>
-                                    <a href="https://wa.me/6281292839906"
-                                        class="text-gray-600 hover:text-brand-green transition block">
-                                        +62 812-9283-9906 (Chat Only)
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div
                                     class="w-12 h-12 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-regular fa-envelope text-xl"></i>
+                                <i class="fa-solid fa-envelope-open-text text-xl"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-900 mb-1">Email Support</h4>
@@ -124,7 +110,7 @@
                         <h3 class="font-bold text-gray-900 mb-4">Ikuti Kami</h3>
                         <div class="flex gap-4">
                             <a href="#"
-                                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-blue hover:text-white transition">
+                                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-600 hover:text-white transition">
                                 <i class="fa-brands fa-instagram"></i>
                             </a>
                             <a href="#"
@@ -280,16 +266,9 @@
             </div>
         </section>
 
-        <a href="https://wa.me/6281292839906" target="_blank"
-            class="fixed bottom-6 right-6 z-50 bg-brand-green text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-brand-greenDark hover:scale-110 transition-all duration-300 animate-bounce-slow"
-            title="Chat WhatsApp">
-            <i class="fa-brands fa-whatsapp text-3xl"></i>
-        </a>
-
     </main>
 
     <x-footer></x-footer>
-
 
     <script>
         function toggleFaq(button) {

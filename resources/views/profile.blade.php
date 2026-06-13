@@ -252,7 +252,7 @@
                     <div class="bg-red-100 border border-red-400 text-red-700 p-4 rounded-xl mt-12" role="alert">
                         <h3 class="font-bold text-lg mb-2">Zona Bahaya</h3>
                         <p class="text-sm mb-4">Tindakan ini akan menghapus data Anda secara permanen.</p>
-                        <button type="button" class="px-5 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">Hapus Akun Saya</button>
+                        <button type="button" class="px-5 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">Hapus Akun Saya (UNDER DEVELOPMENT!)</button>
                     </div>
                 </div>
                 @break
@@ -488,8 +488,8 @@
                 @case('notifikasi')
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Notifikasi Terbaru</h2>
-                    <div class="text-center py-10 border border-dashed border-gray-300 rounded-xl bg-gray-50"><i class="fa-solid fa-bell-slash text-5xl text-gray-400 mb-4"></i>
-                        <p class="text-gray-600 font-medium">Tidak ada notifikasi baru untuk saat ini.</p>
+                    <div class="text-center py-10 border border-dashed border-red-300 rounded-xl bg-gray-50"><i class="fa-solid fa-bell-slash text-5xl text-red-400 mb-4"></i>
+                        <p class="text-red-800 font-bold">UNDER DEVELOPMENT!.</p>
                     </div>
                 </div>
                 @break

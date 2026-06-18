@@ -3,52 +3,145 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class RegisterControllerTest extends TestCase
 {
+    // Menggunakan RefreshDatabase agar database di-reset setiap kali test dijalankan
     use RefreshDatabase;
 
     /**
-     * Test case 1: User berhasil melakukan register
+     * [TC-REG-01] Menguji apakah sistem menampilkan halaman registrasi
      */
-    public function test_user_can_successfully_register()
+    public function test_it_displays_register_view()
     {
-        $response = $this->post(route('register.store'), [
-            'name' => 'John Doe',
-            'email' => 'john@gmail.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
+        // Asumsi route kamu adalah /register
+        $response = $this->get('/register');
 
-        $response->assertRedirect(route('login'))
-                 ->assertSessionHas('success', 'Akun berhasil dibuat! Silakan login.');
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'john@gmail.com',
-            'name' => 'John Doe',
-        ]);
+        $response->assertStatus(200);
+        $response->assertViewIs('register');
     }
 
     /**
-     * Test case 2: User gagal register karena email sudah terdaftar
+     * [TC-REG-02] Menguji registrasi dengan data yang valid
      */
-    public function test_user_cannot_register_with_existing_email()
+    public function test_it_can_register_a_new_user_with_valid_data()
     {
-        User::factory()->create([
-            'email' => 'existing@example.com',
+        $response = $this->post('/register', [
+            'name' => 'Budi Santoso',
+            'email' => 'budi.tester@gmail.com',
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
         ]);
 
-        $response = $this->post(route('register.store'), [
-            'name' => 'Jane Doe',
-            'email' => 'existing@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+        // Assert redirect ke route login
+        $response->assertRedirect(route('login'));
+        
+        // Assert session memiliki pesan success
+        $response->assertSessionHas('success', 'Akun berhasil dibuat! Silakan login.');
+
+        // Assert data masuk ke database
+        $this->assertDatabaseHas('users', [
+            'name' => 'Budi Santoso',
+            'email' => 'budi.tester@gmail.com',
         ]);
 
-        $response->assertSessionHasErrors('email');
+        // Assert password di-hash (tidak tersimpan dalam bentuk plain text)
+        $user = User::where('email', 'budi.tester@gmail.com')->first();
+        $this->assertTrue(Hash::check('rahasia123', $user->password));
+    }
 
-        $this->assertDatabaseCount('users', 1);
+    /**
+     * [TC-REG-03] Menguji kegagalan jika field kosong
+     */
+    public function test_it_fails_validation_if_fields_are_empty()
+    {
+        $response = $this->post('/register', []);
+
+        $response->assertSessionHasErrors(['name', 'email', 'password']);
+    }
+
+    /**
+     * [TC-REG-04] Menguji kegagalan jika nama terlalu pendek
+     */
+    public function test_it_fails_validation_if_name_is_too_short()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Al', // Kurang dari 3 karakter
+            'email' => 'valid.email@gmail.com',
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
+        ]);
+
+        $response->assertSessionHasErrors(['name']);
+    }
+
+    /**
+     * [TC-REG-05] Menguji kegagalan jika format email tidak valid
+     */
+    public function test_it_fails_validation_if_email_is_invalid()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Budi Santoso',
+            'email' => 'bukan-email-yang-benar', // Format salah
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
+        ]);
+
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    /**
+     * [TC-REG-06] Menguji kegagalan jika email sudah terdaftar
+     */
+    public function test_it_fails_validation_if_email_is_already_taken()
+    {
+        // Buat user dummy di database terlebih dahulu
+        User::create([
+            'name' => 'User Lama',
+            'email' => 'existing@gmail.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->post('/register', [
+            'name' => 'User Baru',
+            'email' => 'existing@gmail.com', // Email sudah ada
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
+        ]);
+
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    /**
+     * [TC-REG-07] Menguji kegagalan jika password terlalu pendek
+     */
+    public function test_it_fails_validation_if_password_is_too_short()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Budi Santoso',
+            'email' => 'budi.new@gmail.com',
+            'password' => '12345', // Kurang dari 6 karakter
+            'password_confirmation' => '12345',
+        ]);
+
+        $response->assertSessionHasErrors(['password']);
+    }
+
+    /**
+     * [TC-REG-08] Menguji kegagalan jika konfirmasi password tidak cocok
+     */
+    public function test_it_fails_validation_if_password_confirmation_does_not_match()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Budi Santoso',
+            'email' => 'budi.new@gmail.com',
+            'password' => 'rahasia123',
+            'password_confirmation' => 'beda123', // Tidak cocok dengan password
+        ]);
+
+        $response->assertSessionHasErrors(['password']);
     }
 }
